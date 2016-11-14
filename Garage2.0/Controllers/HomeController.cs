@@ -22,18 +22,34 @@ namespace Garage2._0.Controllers
             return View(Garage.GetVehicles());
         }
 
-        public ActionResult About()
+        public ActionResult Search()
         {
-            ViewBag.Message = "Your application description page.";
-
             return View();
         }
 
-        public ActionResult Contact()
+        public ActionResult Results()
         {
-            ViewBag.Message = "Your contact page.";
-
             return View();
         }
+
+        public ActionResult Checkin()
+        {
+            return View();
+        }
+
+        public ActionResult Checkout()
+        {
+            return View();
+        }
+
+        public ActionResult Edit()
+        {
+            return View();
+        }
+
+
+
+        
+        
     }
 }
