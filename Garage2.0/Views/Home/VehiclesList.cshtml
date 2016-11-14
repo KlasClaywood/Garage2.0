@@ -1,0 +1,64 @@
+﻿@model IEnumerable<Garage2._0.Models.Vehicle>
+<div class="VehicleList">
+    <table class="table" data-toggle="table">
+        <thead>
+            <tr>
+                <th data-sortable="true">
+                    @Html.DisplayNameFor(model => model.Owner)
+                </th>
+                <th data-sortable="true">
+                    @Html.DisplayNameFor(model => model.RegNr)
+                </th>
+                <th data-sortable="true">
+                    @Html.DisplayNameFor(model => model.Color)
+                </th>
+                <th data-sortable="true">
+                    @Html.DisplayNameFor(model => model.NumberOfWheels)
+                </th>
+                <th data-sortable="true">
+                    @Html.DisplayNameFor(model => model.VehicleType)
+                </th>
+                <th data-sortable="true">
+                    @Html.DisplayNameFor(model => model.InTime)
+                </th>
+                <th data-sortable="true">
+                    @Html.DisplayNameFor(model => model.OutTime)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Owner)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RegNr)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Color)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.NumberOfWheels)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.VehicleType)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.InTime)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.OutTime)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                        @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+                        @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

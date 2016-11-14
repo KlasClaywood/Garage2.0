@@ -26,6 +26,16 @@ namespace Garage2._0
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
                       "~/Content/site.css"));
+
+
+            // Bootstrap Table
+
+            bundles.Add(new ScriptBundle("~/bundles/bootstrap-table").Include(
+                      "~/Scripts/bootstrap-table.js",
+                      "~/Scripts/bootstrap-table-locale-all.js"));
+
+            bundles.Add(new StyleBundle("~/Content/bootstrap-table").Include(
+                      "~/Content/bootstrap-table.css"));
         }
     }
 }
