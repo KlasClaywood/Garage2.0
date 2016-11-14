@@ -287,7 +287,7 @@
 
     BootstrapTable.DEFAULTS = {
         classes: 'table table-hover',
-        locale: undefined,
+        locale: 'en-US',
         height: undefined,
         undefinedText: '-',
         sortName: undefined,

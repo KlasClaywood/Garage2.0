@@ -61,9 +61,9 @@ namespace Garage2._0.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Checkin([Bind(Include ="RegNr, Owner, Color, NumberOfWheels")]Vehicle newVehicle)
+        public ActionResult Checkin([Bind(Include ="RegNr, Owner, Color, NumberOfWheels, InTime, OutTime")]Vehicle newVehicle)
         {
-            newVehicle.InTime = DateTime.Now;
+            //newVehicle.InTime = DateTime.Now;
             Garage.AddVehicle(newVehicle);
             return RedirectToAction("Index");
         }
