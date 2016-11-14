@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Garage2._0.Repositories
 {
-    class VehicleQuery
+    public class VehicleQuery
     {
         public string SearchOwner { get; set; }
         public string SearchRegNr { get; set; }

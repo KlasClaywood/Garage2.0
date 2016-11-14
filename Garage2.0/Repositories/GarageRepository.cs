@@ -29,5 +29,16 @@ namespace Garage2._0.Repositories
                                           v.RegNr.Contains(target.SearchRegNr)
                                           );
         }
+
+        public Vehicle GetVehicle(int id)
+        {
+            return Context.Vehicles.Find(id);
+        }
+
+        public void AddVehicle(Vehicle newVehicle)
+        {
+            Context.Vehicles.Add(newVehicle);
+            Context.SaveChanges();
+        }
     }
 }
