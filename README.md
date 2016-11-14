@@ -1,5 +1,6 @@
 # Garage2.0 En Webbapplikation
 Sammanbindning av .NET1, MVC, objektorientering, webbprogrammering
+
 ## Arbetssätt
 Arbetet med Garaget kommer att ske i grupper om tre till fyra personer. tanken är att ni som grupp tillsammans ska diskutera tillvägagångssätt, uppbyggnad och utföring av projektet. Inom detta ingår Modellstruktur, databasstruktur, Controllers, och repositories som behövs och vilka views som kan tänkas behövas. Alltså tillverka en fullstack lösning. Uppdelningen av arbetet är helt upp till varje grupp, det är dock viktigt att samtliga i gruppen är medvetna om hur applikationen fungerar. Under redovisning kan specifika personer frågas om specifika delar av programmet, då är inte "Jag har inte programmerat den här delen av programmet" ett godkänt svar.
 
@@ -42,6 +43,7 @@ Repositories är då arbetarna i garaget som utför alla uppgifter enligt recept
   - Det skall finnas views för att hantera och visa upp samtlig funktionalitet nämnd ovan
   - En view kan användas till fler än en funktion.
   - Det skall gå att navigera till samtliga views utan att redigera adressfältet.
+  
 ## Utökad funktionalitet
 Gör detta enbart om ni är färdiga med ovanstående
 - Gör det möjligt att hyra en plats, alltså låta en bil "tas ut" ur garaget, utan att den ger upp sin plats i databasen
@@ -53,6 +55,7 @@ Gör detta enbart om ni är färdiga med ovanstående
   - Debitera vid utcheckning genom att presentera summan för användaren innan konfirmation
 - Gör det möjligt att debitera extra för fordon som stått längre än sin parkeringstid med 2 * dygnstaxa för varje dygn över sin parkeringstid
 Behövs fler uppgifter, kontakta lärare.
+
 ## Bra att ha länkar
 - http://www.pluralsight.com/courses/mvc4-building
 - http://www.pluralsight.com/courses/csharp-fundamentals-csharp5
