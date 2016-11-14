@@ -31,6 +31,21 @@ namespace Garage2._0.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Search([Bind(Include ="SearchOwner, SearchRegNr, SearchColor")]VehicleQuery target)
         {
+            if (target != null)
+            {
+                if (target.SearchColor == null)
+                {
+                    target.SearchColor = "";
+                }
+                if (target.SearchOwner == null)
+                {
+                    target.SearchOwner = "";
+                }
+                if (target.SearchRegNr == null)
+                {
+                    target.SearchRegNr = "";
+                }
+            }
             return View("Results", Garage.GetVehicles(target));
         }
 
@@ -48,13 +63,22 @@ namespace Garage2._0.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Checkin([Bind(Include ="RegNr, Owner, Color, NumberOfWheels")]Vehicle newVehicle)
         {
+            newVehicle.InTime = DateTime.Now;
             Garage.AddVehicle(newVehicle);
-            return View();
+            return RedirectToAction("Index");
         }
 
+        public ActionResult Checkout(int? id)
+        {
+            
+            return View(Garage.GetVehicle(id.Value));
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Checkout(int id)
         {
-            return View(Garage.GetVehicle(id));
+            Garage.RemoveVehicle(id);
+            return RedirectToAction("Index");
         }
 
         public ActionResult Edit(int id)

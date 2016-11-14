@@ -38,7 +38,22 @@ namespace Garage2._0.Repositories
 
         public void AddVehicle(Vehicle newVehicle)
         {
-            Context.Vehicles.Add(newVehicle);
+            //Vehicle oldVehicle = Context.Vehicles.First(v => v.RegNr == newVehicle.RegNr);
+            //if(oldVehicle != null)
+            //{
+            //    oldVehicle = newVehicle;
+            //    /// All properties except RegNr
+            //}
+            //else
+            //{
+                Context.Vehicles.Add(newVehicle);
+            //}
+            Context.SaveChanges();
+        }
+
+        internal void RemoveVehicle(int id)
+        {
+            Context.Vehicles.Remove(Context.Vehicles.Find(id));
             Context.SaveChanges();
         }
     }
