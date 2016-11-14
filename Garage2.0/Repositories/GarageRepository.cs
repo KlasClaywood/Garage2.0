@@ -23,11 +23,12 @@ namespace Garage2._0.Repositories
 
         public IEnumerable<Vehicle> GetVehicles(VehicleQuery target)
         {
-            return Context.Vehicles.Where(v =>
+            IEnumerable<Vehicle> svar = Context.Vehicles.Where(v =>
                                           v.Color.Contains(target.SearchColor) &&
                                           v.Owner.Contains(target.SearchOwner) &&
                                           v.RegNr.Contains(target.SearchRegNr)
                                           );
+            return svar;
         }
 
         public Vehicle GetVehicle(int id)

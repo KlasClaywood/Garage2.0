@@ -28,9 +28,10 @@ namespace Garage2._0.Controllers
             return View();
         }
         [HttpPost]
-        public ActionResult Search(VehicleQuery target)
+        [ValidateAntiForgeryToken]
+        public ActionResult Search([Bind(Include ="SearchOwner, SearchRegNr, SearchColor")]VehicleQuery target)
         {
-            return RedirectToAction("Results", target);
+            return View("Results", Garage.GetVehicles(target));
         }
 
         public ActionResult Results(VehicleQuery target)
@@ -44,7 +45,8 @@ namespace Garage2._0.Controllers
         }
 
         [HttpPost]
-        public ActionResult Checkin(Vehicle newVehicle)
+        [ValidateAntiForgeryToken]
+        public ActionResult Checkin([Bind(Include ="RegNr, Owner, Color, NumberOfWheels")]Vehicle newVehicle)
         {
             Garage.AddVehicle(newVehicle);
             return View();
