@@ -14,12 +14,12 @@ namespace Garage2._0.Controllers
 
         public ActionResult Index()
         {
-            return View(garageContext.Vehicles);
+            return View(Garage.GetVehicles());
         }
 
         public ActionResult Index2()
         {
-            return View(garageContext.Vehicles);
+            return View(Garage.GetVehicles());
         }
 
         public ActionResult About()
