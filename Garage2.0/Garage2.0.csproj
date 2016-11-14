@@ -126,6 +126,7 @@
     <Compile Include="Models\Vehicle.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\GarageRepository.cs" />
+    <Compile Include="Models\VehicleQuery.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Data\GarageDb.mdf" />
