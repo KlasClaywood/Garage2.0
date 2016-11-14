@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Garage2._0.DataAccessLayer;
+using Garage2._0.Repositories;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -8,9 +10,16 @@ namespace Garage2._0.Controllers
 {
     public class HomeController : Controller
     {
+        public GarageRepository Garage = new GarageRepository();
+
         public ActionResult Index()
         {
-            return View();
+            return View(garageContext.Vehicles);
+        }
+
+        public ActionResult Index2()
+        {
+            return View(garageContext.Vehicles);
         }
 
         public ActionResult About()
