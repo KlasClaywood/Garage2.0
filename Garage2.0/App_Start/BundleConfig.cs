@@ -39,11 +39,13 @@ namespace Garage2._0
 
             //Datepicker
             BundleTable.Bundles.Add(new ScriptBundle("~/bundles/datepicker").Include(
-         "~/Scripts/bootstrap-datepicker.js",
-         "~/Scripts/locales/bootstrap-datepicker.*"));
+            "~/Scripts/bootstrap-datetimepicker.js"));
 
             BundleTable.Bundles.Add(new StyleBundle("~/Content/datepicker").Include(
-            "~/Content/bootstrap-datepicker.css"));
+            "~/Content/bootstrap-datetimepicker.css"));
+
+            BundleTable.Bundles.Add(new ScriptBundle("~/bundles/momentjs").Include(
+            "~/Scripts/moment.js"));
         }
     }
 }
