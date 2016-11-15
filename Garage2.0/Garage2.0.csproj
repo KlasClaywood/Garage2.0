@@ -472,6 +472,7 @@
     <Content Include="Views\Home\Checkin.cshtml" />
     <Content Include="Views\Home\Checkout.cshtml" />
     <Content Include="Views\Home\Details.cshtml" />
+    <Content Include="Views\Home\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
