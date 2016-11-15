@@ -7,6 +7,12 @@
     $('.datepickercheckin').datetimepicker();
 
     $('body').on("submit", "#modalForm", FormSubmitted);
+
+    $('body').popover({
+        selector: '.detailsLink',
+        trigger: 'focus',
+        viewport: 'body'
+    });
 })
 
 var FormSubmitted = function () {
@@ -16,13 +22,18 @@ var FormSubmitted = function () {
     }
 };
 
-var ModalLoaded = function (data) {
+var ModalLoaded = function () {
     //$('.modal-title').html(data.title);
     //$('.modal-body').html(data.body);
     //$('.modal-submit').val(data.submit);
     $('#Modal').modal('toggle');
     $.validator.unobtrusive.parse('body');
     //return false;
+};
+
+var FormSuccess = function (data) {
+    $('#Modal').modal('hide');
+    refreshVehicleList();
 };
 
 var refreshVehicleList = function () {

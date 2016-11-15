@@ -56,10 +56,16 @@ namespace Garage2._0.Repositories
             
         }
 
-        public void RemoveVehicle(int id)
+        public bool RemoveVehicle(int id)
         {
-            Context.Vehicles.Remove(Context.Vehicles.Find(id));
-            Context.SaveChanges();
+            Vehicle VToRemove = Context.Vehicles.Find(id);
+            if (VToRemove != null)
+            {
+                Context.Vehicles.Remove(Context.Vehicles.Find(id));
+                Context.SaveChanges();
+                return true;
+            }
+            return false;
         }
 
         public void EditVehicle(Vehicle newVehicle)

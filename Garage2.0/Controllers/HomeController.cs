@@ -67,12 +67,23 @@ namespace Garage2._0.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Checkin([Bind(Include ="RegNr, Owner, Color, VehicleType, NumberOfWheels, InTime, OutTime")]Vehicle newVehicle)
         {
-            //newVehicle.InTime = DateTime.Now;
             if (ModelState.IsValid)
             {
-                Garage.AddVehicle(newVehicle);
+                if (!newVehicle.InTime.HasValue) // server side check for inTime
+                {
+                    TempData["ErrorMessage"] = "Invalid Data!";
+                }
+                else
+                {
+                    Garage.AddVehicle(newVehicle);
+                }
             }
-            
+
+            if (Request.IsAjaxRequest())
+            {
+                return PartialView("Checkin", newVehicle);
+            }
+
             return RedirectToAction("Index");
         }
 
@@ -85,8 +96,14 @@ namespace Garage2._0.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Checkout(int id)
         {
-            Garage.RemoveVehicle(id);
-            return RedirectToAction("Index");
+            if (Garage.RemoveVehicle(id))
+            {
+                return Json(new { message = "Success!" });
+            }
+            else
+            {
+                return Json(new { message = "Failed!" });
+            }
         }
 
         public ActionResult Edit(int id)

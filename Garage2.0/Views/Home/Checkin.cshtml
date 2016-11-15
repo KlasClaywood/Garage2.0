@@ -1,5 +1,7 @@
 ﻿@model Garage2._0.Models.Vehicle
-
+@{
+    Layout = null;
+}
 <div class="modal fade" tabindex="-1" role="dialog" id="Modal">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -8,7 +10,7 @@
                 <h4 class="modal-title">Check In!</h4>
             </div>
             <div class="modal-body">
-                @using (Ajax.BeginForm("Checkin", "Home", null, new AjaxOptions { OnSuccess = "refreshVehicleList" }, new { id = "modalForm", target = "_self" }))
+                @using (Ajax.BeginForm("Checkin", "Home", null, new AjaxOptions { OnSuccess = "FormSuccess" }, new { id = "modalForm", target = "_self" }))
                 {
                     @Html.AntiForgeryToken()
 
@@ -58,7 +60,14 @@
                             @Html.LabelFor(model => model.InTime, htmlAttributes: new { @class = "control-label col-md-2" })
                             <div class="col-md-10">
                                 <input type='text' class="form-control datepickercheckin" id='datetimepickerin' name="InTime" />
-                                @Html.ValidationMessageFor(model => model.InTime, "", new { @class = "text-danger" })
+                                @{
+                                    if (TempData["ErrorMessage"] != "" || TempData["ErrorMessage"] != null)
+                                    {
+                                        <span class="text-danger field-validation-error">
+                                            @TempData["ErrorMessage"]
+                                        </span>
+                                    }
+                                }
                             </div>
                         </div>
 
@@ -66,7 +75,14 @@
                             @Html.LabelFor(model => model.OutTime, htmlAttributes: new { @class = "control-label col-md-2" })
                             <div class="col-md-10">
                                 <input type='text' class="form-control datepickercheckin" id='datetimepickerout' name="OutTime" />
-                                @Html.ValidationMessageFor(model => model.OutTime, "", new { @class = "text-danger" })
+                                @{
+                                    if (TempData["ErrorMessage"] != "" || TempData["ErrorMessage"] != null)
+                                    {
+                                            <span class="text-danger field-validation-error">
+                                                @TempData["ErrorMessage"]
+                                            </span>
+                                    }
+                                }
                             </div>
                         </div>
                     </div>

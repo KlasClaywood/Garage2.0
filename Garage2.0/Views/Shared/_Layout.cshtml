@@ -25,7 +25,7 @@
                     <li>@Html.ActionLink("Home", "Index", "Home")</li>
                     <li>@Ajax.ActionLink("Check In", "Checkin", null, new AjaxOptions
                         {
-                           InsertionMode = System.Web.Mvc.Ajax.InsertionMode.Replace,
+                           InsertionMode = InsertionMode.Replace,
                            UpdateTargetId = "ModalContainer",
                            HttpMethod = "GET", 
                            OnSuccess = "ModalLoaded"
