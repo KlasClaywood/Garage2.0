@@ -22,11 +22,7 @@ namespace Garage2._0.Controllers
             return View(Garage.GetVehicles());
         }
 
-        public ActionResult Search()
-        {
-            return View();
-        }
-        [HttpPost]
+        
         [ValidateAntiForgeryToken]
         public ActionResult Search([Bind(Include ="SearchOwner, SearchRegNr, SearchColor")]VehicleQuery target)
         {
@@ -45,7 +41,13 @@ namespace Garage2._0.Controllers
                     target.SearchRegNr = "";
                 }
             }
-            return View("Results", Garage.GetVehicles(target));
+            if (Request.IsAjaxRequest())
+            {
+                return PartialView("VehiclesList", Garage.GetVehicles(target));
+            }
+
+            return RedirectToAction("Index");
+            //return View("Results", Garage.GetVehicles(target));
         }
 
         public ActionResult Results(VehicleQuery target)
