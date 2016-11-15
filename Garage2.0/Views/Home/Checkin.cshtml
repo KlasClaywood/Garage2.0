@@ -57,7 +57,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.InTime, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                <input type='text' class="form-control datepickercheckin" id='datetimepickerin' />
+                <input type='text' class="form-control datepickercheckin" id='datetimepickerin' name="InTime" />
                 @Html.ValidationMessageFor(model => model.InTime, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -65,7 +65,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.OutTime, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                <input type='text' class="form-control datepickercheckin" id='datetimepickerout' />
+                <input type='text' class="form-control datepickercheckin" id='datetimepickerout' name="OutTime"/>
                 @Html.ValidationMessageFor(model => model.OutTime, "", new { @class = "text-danger" })
             </div>
         </div>
