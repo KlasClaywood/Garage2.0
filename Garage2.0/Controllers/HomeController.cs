@@ -67,29 +67,24 @@ namespace Garage2._0.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Checkin([Bind(Include ="RegNr, Owner, Color, VehicleType, NumberOfWheels, InTime, OutTime")]Vehicle newVehicle)
         {
-            if (ModelState.IsValid)
+            if (ModelState.IsValid && Request.IsAjaxRequest())
             {
                 if (!newVehicle.InTime.HasValue) // server side check for inTime
                 {
                     TempData["ErrorMessage"] = "Invalid Data!";
+                    return PartialView("Checkin", newVehicle);
                 }
                 else
                 {
                     Garage.AddVehicle(newVehicle);
+                    return Json(new { type = true, message = string.Format("Vehicle {0} was checked in", newVehicle.RegNr) });
                 }
             }
-
-            if (Request.IsAjaxRequest())
-            {
-                return PartialView("Checkin", newVehicle);
-            }
-
             return RedirectToAction("Index");
         }
 
         public ActionResult Checkout(int? id)
         {
-            
             return View(Garage.GetVehicle(id.Value));
         }
         [HttpPost]
@@ -98,23 +93,36 @@ namespace Garage2._0.Controllers
         {
             if (Garage.RemoveVehicle(id))
             {
-                return Json(new { message = "Success!" });
+                return Json(new { type = true, message = "Vechicle was checkedout!" });
             }
             else
             {
-                return Json(new { message = "Failed!" });
+                return Json(new { type = false, message = "Vechicle was not checkedout!" });
             }
         }
 
         public ActionResult Edit(int id)
         {
-            return View(Garage.GetVehicle(id));
+            return PartialView("Edit", Garage.GetVehicle(id));
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include ="Id,RegNr, Owner, Color, VehicleType, NumberOfWheels, InTime, OutTime")]Vehicle newVehicle)
         {
-            Garage.EditVehicle(newVehicle);
+            if (ModelState.IsValid && Request.IsAjaxRequest())
+            {
+                if (!newVehicle.InTime.HasValue) // server side check for inTime
+                {
+                    TempData["ErrorMessage"] = "Invalid Data!";
+                    return PartialView("Edit", newVehicle);
+                }
+                else
+                {
+                    Garage.EditVehicle(newVehicle);
+                    return Json(new { type = true, message = "Item Edited!" });
+                }
+            }
+            
             return RedirectToAction("Index");
         }
 

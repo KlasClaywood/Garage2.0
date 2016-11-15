@@ -2,6 +2,7 @@
 using Garage2._0.Models;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Web;
 
@@ -70,14 +71,8 @@ namespace Garage2._0.Repositories
 
         public void EditVehicle(Vehicle newVehicle)
         {
-            Vehicle oldVehicle = Context.Vehicles.Find(newVehicle.Id);
-            oldVehicle.Owner = newVehicle.Owner;
-            oldVehicle.RegNr = newVehicle.RegNr;
-            oldVehicle.VehicleType = newVehicle.VehicleType;
-            oldVehicle.Color = newVehicle.Color;
-            oldVehicle.NumberOfWheels = newVehicle.NumberOfWheels;
-            oldVehicle.InTime = newVehicle.InTime;
-            oldVehicle.OutTime = newVehicle.OutTime;
+            Context.Entry(newVehicle).State = EntityState.Modified;
+
             Context.SaveChanges();
         }
     }

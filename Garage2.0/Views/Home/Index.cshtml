@@ -3,12 +3,14 @@
 @{
     ViewBag.Title = "Index";
 }
+<div class="alert text-center" role="alert" id="general-alert">
+</div>
 
 <h2>Index</h2>
 
 
 <div id="VechicleListContainer">
-@Html.Partial("VehiclesList", Model)
+    @Html.Partial("VehiclesList", Model)
 </div>
 
 

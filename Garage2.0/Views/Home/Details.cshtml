@@ -59,7 +59,7 @@
             </td>
         </tr>
         @{if (Model.OutTime.HasValue)
-          {
+        {
             <tr>
                 <td>
                     <strong>@Html.DisplayNameFor(model => model.OutTime)</strong>
@@ -69,12 +69,7 @@
                     @Html.DisplayFor(model => model.OutTime)
                 </td>
             </tr>
-          }
+        }
         }
     </tbody>
 </table>
-<div class="row">
-    <div class="col-md-offset-5 col-sm-offset-5">
-        @Html.ActionLink("Edit", "Edit", new { id = Model.Id })
-    </div>
-</div>
