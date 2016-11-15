@@ -4,10 +4,13 @@
     ViewBag.Title = "Checkin";
 }
 
-<h2>Checkin</h2>
+@using (Ajax.BeginForm("CheckIn", "Home", null, new AjaxOptions
+                {
+                    InsertionMode = InsertionMode.Replace,
+                    UpdateTargetId = "createformView",
+                    OnSuccess = "CreateFormSubmitted"
+                }, new { id = "createForm" })) {
 
-@using (Html.BeginForm()) 
-{
     @Html.AntiForgeryToken()
     
     <div class="form-horizontal">
@@ -57,6 +60,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.InTime, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
+
                 <input type='text' class="form-control datepickercheckin" id='datetimepickerin' />
                 @Html.ValidationMessageFor(model => model.InTime, "", new { @class = "text-danger" })
             </div>
@@ -65,6 +69,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.OutTime, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
+
                 <input type='text' class="form-control datepickercheckin" id='datetimepickerout' />
                 @Html.ValidationMessageFor(model => model.OutTime, "", new { @class = "text-danger" })
             </div>
