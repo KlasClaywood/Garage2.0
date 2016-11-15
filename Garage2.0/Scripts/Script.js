@@ -10,30 +10,25 @@
 })
 
 var FormSubmitted = function () {
-    $this = $("#" + $(this).attr("Form"));
-    console.log("submitted");
-    console.log("this:" + $this);
+    $this = $(this);
     if (!$this.valid()) {
         return false;
-        console.log("notValid");
     }
-    return false;
 };
 
 var ModalLoaded = function (data) {
     //$('.modal-title').html(data.title);
     //$('.modal-body').html(data.body);
     //$('.modal-submit').val(data.submit);
-
     $('#Modal').modal('toggle');
+    $.validator.unobtrusive.parse('body');
     //return false;
 };
 
 var refreshVehicleList = function () {
     var options = {
-        url: "/Index",
+        url: "/Home/Index",
         type: 'get',
-        data: $obj.serialize()
     };
 
     $.ajax(options).done(function (data) {
