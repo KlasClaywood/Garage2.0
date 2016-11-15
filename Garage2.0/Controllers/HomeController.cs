@@ -61,7 +61,7 @@ namespace Garage2._0.Controllers
                 return PartialView("Checkin", new Vehicle());
             }
 
-            return View();
+            return RedirectToAction("Index");
         }
 
         [HttpPost]
