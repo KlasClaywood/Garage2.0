@@ -61,7 +61,7 @@ namespace Garage2._0.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Checkin([Bind(Include ="RegNr, Owner, Color, NumberOfWheels, InTime, OutTime")]Vehicle newVehicle)
+        public ActionResult Checkin([Bind(Include ="RegNr, Owner, Color, VehicleType, NumberOfWheels, InTime, OutTime")]Vehicle newVehicle)
         {
             //newVehicle.InTime = DateTime.Now;
             Garage.AddVehicle(newVehicle);
@@ -84,6 +84,13 @@ namespace Garage2._0.Controllers
         public ActionResult Edit(int id)
         {
             return View(Garage.GetVehicle(id));
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit([Bind(Include ="Id,RegNr, Owner, Color, VehicleType, NumberOfWheels, InTime, OutTime")]Vehicle newVehicle)
+        {
+            Garage.EditVehicle(newVehicle);
+            return RedirectToAction("Index");
         }
 
         public ActionResult Details(int id)

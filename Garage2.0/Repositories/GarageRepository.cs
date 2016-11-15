@@ -51,9 +51,22 @@ namespace Garage2._0.Repositories
             Context.SaveChanges();
         }
 
-        internal void RemoveVehicle(int id)
+        public void RemoveVehicle(int id)
         {
             Context.Vehicles.Remove(Context.Vehicles.Find(id));
+            Context.SaveChanges();
+        }
+
+        public void EditVehicle(Vehicle newVehicle)
+        {
+            Vehicle oldVehicle = Context.Vehicles.Find(newVehicle.Id);
+            oldVehicle.Owner = newVehicle.Owner;
+            oldVehicle.RegNr = newVehicle.RegNr;
+            oldVehicle.VehicleType = newVehicle.VehicleType;
+            oldVehicle.Color = newVehicle.Color;
+            oldVehicle.NumberOfWheels = newVehicle.NumberOfWheels;
+            oldVehicle.InTime = newVehicle.InTime;
+            oldVehicle.OutTime = newVehicle.OutTime;
             Context.SaveChanges();
         }
     }
