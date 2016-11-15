@@ -6,9 +6,14 @@
 
     $('.datepickercheckin').datetimepicker();
 
-    var ModalLoaded = function (data) {
-        var json = data.get_response().get_object();
-        $('.modal-title').html(json.title);
-        $('.modal-body').html(json.body);
-    }
+    
 })
+
+var ModalLoaded = function (data) {
+    //$('.modal-title').html(data.title);
+    //$('.modal-body').html(data.body);
+    //$('.modal-submit').val(data.submit);
+
+    $('#Modal').modal('toggle');
+    //return false;
+};

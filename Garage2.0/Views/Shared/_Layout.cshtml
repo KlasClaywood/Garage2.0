@@ -23,9 +23,13 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                    <li>@Ajax.ActionLink("Check In", "Checkin", "Home", new AjaxOptions{
-                        OnSuccess = "ModalLoaded"
-                        })
+                    <li>@Ajax.ActionLink("Check In", "Checkin", null, new AjaxOptions
+                   {
+                       InsertionMode = System.Web.Mvc.Ajax.InsertionMode.Replace,
+                       UpdateTargetId = "ModalContainer",
+                       HttpMethod = "GET", 
+                       OnSuccess = "ModalLoaded"
+                   }, new { target = "_self" })
                    </li>
                     <li>@Html.ActionLink("Search", "Search", "Home")</li>
                 </ul>
@@ -41,11 +45,12 @@
     </div>
 
     @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/Scripts/Script.js")
     @Scripts.Render("~/bundles/bootstrap")
     @Scripts.Render("~/bundles/bootstrap-table")
     @Scripts.Render("~/bundles/momentjs")
     @Scripts.Render("~/bundles/datepicker")
-    @Scripts.Render("~/Scripts/Script.js")
+    @Scripts.Render("~/Scripts/jquery.unobtrusive-ajax.js")
     @RenderSection("scripts", required: false)
 </body>
 </html>

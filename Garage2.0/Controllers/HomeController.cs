@@ -56,6 +56,11 @@ namespace Garage2._0.Controllers
 
         public ActionResult Checkin()
         {
+            if (Request.IsAjaxRequest())
+            {
+                return PartialView("Checkin", new Vehicle());
+            }
+
             return View();
         }
 
