@@ -23,7 +23,10 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                    <li>@Html.ActionLink("Check In", "Checkin", "Home")</li>
+                    <li>@Ajax.ActionLink("Check In", "Checkin", "Home", new AjaxOptions{
+                        OnSuccess = "ModalLoaded"
+                        })
+                   </li>
                     <li>@Html.ActionLink("Search", "Search", "Home")</li>
                 </ul>
             </div>
