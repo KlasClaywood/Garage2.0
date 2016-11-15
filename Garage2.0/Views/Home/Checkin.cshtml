@@ -8,7 +8,7 @@
                 <h4 class="modal-title">Check In!</h4>
             </div>
             <div class="modal-body">
-                @using (Ajax.BeginForm("Checkin", "Home", null, new AjaxOptions { OnSuccess = "ModalLoaded" }, new { id = "modalForm", target = "_self" }))
+                @using (Ajax.BeginForm("Checkin", "Home", null, new AjaxOptions { OnSuccess = "refreshVehicleList" }, new { id = "modalForm", target = "_self" }))
                 {
                     @Html.AntiForgeryToken()
 

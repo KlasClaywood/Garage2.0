@@ -15,11 +15,10 @@ namespace Garage2._0.Controllers
 
         public ActionResult Index()
         {
-            return View(Garage.GetVehicles());
-        }
-
-        public ActionResult Index2()
-        {
+            if (Request.IsAjaxRequest())
+            {
+                return PartialView("VehiclesList", Garage.GetVehicles());
+            }
             return View(Garage.GetVehicles());
         }
 
@@ -69,7 +68,11 @@ namespace Garage2._0.Controllers
         public ActionResult Checkin([Bind(Include ="RegNr, Owner, Color, VehicleType, NumberOfWheels, InTime, OutTime")]Vehicle newVehicle)
         {
             //newVehicle.InTime = DateTime.Now;
-            Garage.AddVehicle(newVehicle);
+            if (ModelState.IsValid)
+            {
+                Garage.AddVehicle(newVehicle);
+            }
+            
             return RedirectToAction("Index");
         }
 
@@ -102,8 +105,5 @@ namespace Garage2._0.Controllers
         {
             return View(Garage.GetVehicle(id));
         }
-
-        
-        
     }
 }

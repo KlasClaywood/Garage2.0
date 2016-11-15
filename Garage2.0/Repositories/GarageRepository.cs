@@ -46,9 +46,14 @@ namespace Garage2._0.Repositories
             //}
             //else
             //{
+            if(newVehicle != null)
+            {
                 Context.Vehicles.Add(newVehicle);
+                Context.SaveChanges();
+            }
+                
             //}
-            Context.SaveChanges();
+            
         }
 
         public void RemoveVehicle(int id)
