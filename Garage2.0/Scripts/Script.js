@@ -77,5 +77,4 @@ var ShowAlert = function (type, message) {
             $("#general-alert").html("");
         });
     }
-        
 };
