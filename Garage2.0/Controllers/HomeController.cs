@@ -97,6 +97,13 @@ namespace Garage2._0.Controllers
                 }
                 else
                 {
+                    
+                    /* /// default vehicle prices from the model Prices.cs
+                    string priceName = Enum.GetNames(typeof(prices)).Single(n => n.Equals(newVehicle.VehicleType.ToString()));
+                    int price = (int)Enum.Parse(typeof(prices), priceName);
+
+                    newVehicle.price = price;*/
+
                     Garage.AddVehicle(newVehicle);
                     return Json(new { type = true, message = string.Format("Vehicle {0} was checked in", newVehicle.RegNr) });
                 }

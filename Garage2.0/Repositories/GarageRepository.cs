@@ -19,7 +19,29 @@ namespace Garage2._0.Repositories
 
         public IEnumerable<Vehicle> GetVehicles()
         {
-            return Context.Vehicles;
+            List<Vehicle> vehicles = Context.Vehicles.ToList();
+
+            // needs fixing and changing
+            for (int i = 0; i < vehicles.Count(); i+=1 )
+            {
+                if (vehicles[i].OutTime >= DateTime.Now)
+                {
+                    TimeSpan difference = (vehicles[i].OutTime ?? DateTime.Now) - DateTime.Now;
+
+                    int daycount = difference.Days;
+
+
+                    // fine him by increasing the payment for a vehicle by day count
+                    // vehicles[i].price = (price * 2) * daycount
+                }
+
+                if (vehicles[i].OutTime > DateTime.Now && vehicles[i].InTime < DateTime.Now) // if vehicle still exist in the garage.
+                {
+
+                }
+            }
+            
+            return vehicles;
         }
 
         public IEnumerable<Vehicle> GetVehicles(VehicleQuery target)
