@@ -6,7 +6,7 @@
     $("#general-alert").hide();
 
     $('.date').datetimepicker({
-        format: "M/D, h:m A",
+        format: "D/M, H:m",
         sideBySide: true
     });
 

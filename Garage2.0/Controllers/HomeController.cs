@@ -3,6 +3,7 @@ using Garage2._0.Models;
 using Garage2._0.Repositories;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -24,8 +25,14 @@ namespace Garage2._0.Controllers
 
         
         [ValidateAntiForgeryToken]
-        public ActionResult Search([Bind(Include = "SearchOwner, SearchRegNr, SearchColor, VehicleType, InTimeFilter, OutTimeFilter")]VehicleQuery target)
+        public ActionResult Search([Bind(Include = "SearchOwner, SearchRegNr, SearchColor, VehicleType")]VehicleQuery target, string InTimeFilter, string OutTimeFilter)
         {
+            //HttpContext.Request.InputStream.Position = 0;
+            //var result = new System.IO.StreamReader(HttpContext.Request.InputStream).ReadToEnd();
+            if(!string.IsNullOrEmpty(InTimeFilter))
+                target.InTimeFilter = DateTime.ParseExact(InTimeFilter, "d/M, H:m", CultureInfo.InvariantCulture);
+            if (!string.IsNullOrEmpty(OutTimeFilter))
+                target.OutTimeFilter = DateTime.ParseExact(OutTimeFilter, "d/M, H:m", CultureInfo.InvariantCulture);
             if (target != null)
             {
                 if (target.SearchColor == null)
@@ -38,7 +45,7 @@ namespace Garage2._0.Controllers
                 }
                 if (target.SearchRegNr == null)
                 {
-                    target.SearchRegNr = "";
+                     target.SearchRegNr = "";
                 }
                 if (target.VehicleType == null)
                 {
@@ -46,11 +53,11 @@ namespace Garage2._0.Controllers
                 }
                 if (target.InTimeFilter == null)
                 {
-                    target.InTimeFilter = new DateTime(2000);
+                    target.InTimeFilter = new DateTime(2000, 1, 1);
                 }
                 if (target.OutTimeFilter == null)
                 {
-                    target.OutTimeFilter = new DateTime(3000);
+                    target.OutTimeFilter = new DateTime(3000, 1, 1);
                 }
             }
             if (Request.IsAjaxRequest())

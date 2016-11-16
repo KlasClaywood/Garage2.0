@@ -28,11 +28,21 @@ namespace Garage2._0.Repositories
                                           v.Color.Contains(target.SearchColor) &&
                                           v.Owner.Contains(target.SearchOwner) &&
                                           v.RegNr.Contains(target.SearchRegNr) &&
-                                          target.VehicleType.Any(t => t == v.VehicleType.ToString()) &&
-                                          v.InTime >= target.InTimeFilter &&
-                                          v.OutTime <= target.OutTimeFilter
+                                          target.VehicleType.Any(t => t.Equals(v.VehicleType.ToString())) &&
+                                          v.InTime >= target.InTimeFilter
                                           );
-            return svar;
+
+            IEnumerable<Vehicle> svar1 = Context.Vehicles.Where(v =>
+                                        v.Color.Contains(target.SearchColor) &&
+                                        v.Owner.Contains(target.SearchOwner) &&
+                                        v.RegNr.Contains(target.SearchRegNr) &&
+                                        target.VehicleType.Any(t => t.Equals(v.VehicleType.ToString())) &&
+                                        v.InTime >= target.InTimeFilter &&
+                                        v.OutTime <= target.OutTimeFilter
+                ).Union(svar);
+
+
+            return svar1;
         }
 
         public Vehicle GetVehicle(int id)

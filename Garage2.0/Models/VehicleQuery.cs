@@ -13,8 +13,8 @@ namespace Garage2._0.Repositories
 
         public IEnumerable<string> VehicleType { get; set; }
 
-        public DateTime InTimeFilter { get; set; }
-        public DateTime OutTimeFilter { get; set; }
+        public DateTime? InTimeFilter { get; set; }
+        public DateTime? OutTimeFilter { get; set; }
 
     }
 }
