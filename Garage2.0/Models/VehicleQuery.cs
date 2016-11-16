@@ -11,5 +11,10 @@ namespace Garage2._0.Repositories
         public string SearchRegNr { get; set; }
         public string SearchColor { get; set; }
 
+        public IEnumerable<string> VehicleType { get; set; }
+
+        public DateTime InTimeFilter { get; set; }
+        public DateTime OutTimeFilter { get; set; }
+
     }
 }

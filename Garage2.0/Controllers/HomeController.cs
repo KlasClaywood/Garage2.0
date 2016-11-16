@@ -24,7 +24,7 @@ namespace Garage2._0.Controllers
 
         
         [ValidateAntiForgeryToken]
-        public ActionResult Search([Bind(Include ="SearchOwner, SearchRegNr, SearchColor")]VehicleQuery target)
+        public ActionResult Search([Bind(Include = "SearchOwner, SearchRegNr, SearchColor, VehicleType, InTimeFilter, OutTimeFilter")]VehicleQuery target)
         {
             if (target != null)
             {
@@ -39,6 +39,18 @@ namespace Garage2._0.Controllers
                 if (target.SearchRegNr == null)
                 {
                     target.SearchRegNr = "";
+                }
+                if (target.VehicleType == null)
+                {
+                    target.VehicleType = typeof(Vehicles).GetEnumNames().Select(v => v);
+                }
+                if (target.InTimeFilter == null)
+                {
+                    target.InTimeFilter = new DateTime(2000);
+                }
+                if (target.OutTimeFilter == null)
+                {
+                    target.OutTimeFilter = new DateTime(3000);
                 }
             }
             if (Request.IsAjaxRequest())
@@ -130,7 +142,10 @@ namespace Garage2._0.Controllers
 
         public ActionResult Details(int id)
         {
-            return View(Garage.GetVehicle(id));
+            if(Request.IsAjaxRequest())
+                return PartialView("Details", Garage.GetVehicle(id));
+
+            return RedirectToAction("Index");
         }
     }
 }

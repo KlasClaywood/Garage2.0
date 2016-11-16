@@ -27,7 +27,10 @@ namespace Garage2._0.Repositories
             IEnumerable<Vehicle> svar = Context.Vehicles.Where(v =>
                                           v.Color.Contains(target.SearchColor) &&
                                           v.Owner.Contains(target.SearchOwner) &&
-                                          v.RegNr.Contains(target.SearchRegNr)
+                                          v.RegNr.Contains(target.SearchRegNr) &&
+                                          target.VehicleType.Any(t => t == v.VehicleType.ToString()) &&
+                                          v.InTime >= target.InTimeFilter &&
+                                          v.OutTime <= target.OutTimeFilter
                                           );
             return svar;
         }
