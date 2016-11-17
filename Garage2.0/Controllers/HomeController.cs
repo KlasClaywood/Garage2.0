@@ -132,5 +132,21 @@ namespace Garage2._0.Controllers
         {
             return View(Garage.GetVehicle(id));
         }
+
+        public ActionResult PFilterVehicle(string fordon = "")
+        {            
+            if(fordon == "")
+                return View();
+            else
+                return View("Index", Garage.FilterVehicle(fordon));
+        }
+
+        public ActionResult PFilterInDate(string indatum = "")
+        {
+            if (indatum == "")
+                return View();
+            else
+                return View("Index", Garage.FilterInDate(indatum));
+        }
     }
 }

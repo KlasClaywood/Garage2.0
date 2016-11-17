@@ -75,5 +75,51 @@ namespace Garage2._0.Repositories
 
             Context.SaveChanges();
         }
+
+        public IEnumerable<Vehicle> FilterVehicle(string fordon)
+        {
+            Vehicles answer = new Vehicles();
+
+            if ("Car" == fordon)
+                answer = Vehicles.Car;
+            else if ("Truck" == fordon)
+                answer = Vehicles.Truck;
+            else if ("Boat" == fordon)
+                answer = Vehicles.Boat;
+            else if ("Motorcycle" == fordon)
+                answer = Vehicles.Motorcycle;
+
+            IEnumerable<Vehicle> outanswer = from i in Context.Vehicles
+                                        where i.VehicleType == answer
+                                        select i;
+            return outanswer;
+        }
+
+        public IEnumerable<Vehicle> FilterInDate(string indatum)
+        {
+            var tmp = DateTime.Today.AddDays(7);
+            DateTime MinusSeven = DateTime.Today.AddDays(-7);
+
+            IEnumerable<Vehicle> outanswer; // = new IEnumerable<Vehicle>();
+            if (indatum == "Today")
+            {
+                outanswer = from i in Context.Vehicles
+                            where i.InTime.Value.Date == DateTime.Today.Date
+                            select i;
+            }
+            else if (indatum == "Week")
+            {
+                outanswer = from i in Context.Vehicles
+                            where i.InTime.Value.AddDays(0) >= MinusSeven
+                            select i;
+            }
+            else
+            { 
+            outanswer = from i in Context.Vehicles
+                        where i.InTime.Value.AddDays(0) == DateTime.Today.AddDays(7)
+                        select i;
+            }
+             return outanswer;
+        }
     }
 }
