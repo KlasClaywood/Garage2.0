@@ -40,8 +40,8 @@ namespace Garage2._0.Repositories
 
                 }
             }
-            
-            return vehicles;
+
+            return vehicles.OrderBy(v => v.VehicleType).ThenByDescending(v => v.InTime);
         }
 
         public IEnumerable<Vehicle> GetVehicles(VehicleQuery target)
@@ -51,7 +51,7 @@ namespace Garage2._0.Repositories
                                           v.Owner.Contains(target.SearchOwner) &&
                                           v.RegNr.Contains(target.SearchRegNr) &&
                                           target.VehicleType.Any(t => t.Equals(v.VehicleType.ToString())) &&
-                                          v.InTime >= target.InTimeFilter
+                                          v.InTime >= target.InTimeFilter                                          
                                           );
 
             IEnumerable<Vehicle> svar1 = Context.Vehicles.Where(v =>
@@ -62,13 +62,13 @@ namespace Garage2._0.Repositories
                                         v.InTime >= target.InTimeFilter &&
                                         v.OutTime <= target.OutTimeFilter
                 ).Union(svar);
-
-
-            return svar1;
+            
+            return svar1.OrderBy(v => v.VehicleType).ThenByDescending(v => v.InTime);
         }
 
         public Vehicle GetVehicle(int id)
         {
+            ////return Context.Vehicles.Find(id);
             return Context.Vehicles.Find(id);
         }
 
