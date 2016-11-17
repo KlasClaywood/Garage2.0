@@ -23,6 +23,18 @@
 
 });
 
+var getVehiclePriceCheckIn = function () {
+    var options = {
+        url: "/Home/Index",
+        type: 'get'
+    };
+
+    $.ajax(options).done(function (data) {
+        $('#VechicleListContainer').html(data);
+        buildTable();
+    });
+};
+
 var FormSubmitted = function () {
     $this = $(this);
     if (!$this.valid()) {
