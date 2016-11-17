@@ -18,7 +18,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                <a href="@Url.Action("Index")" class="navbar-brand"><img src="~/Content/Images/logo2.png" alt="Garage 2.0" style="height:30px;display:inline;margin-right:5px;">Garage 2.0</a>
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
@@ -32,44 +32,6 @@
                        OnSuccess = "ModalLoaded"
                    }, new { target = "_self" })
                     </li>
-                    <li>@Html.ActionLink("Search", "Search", "Home")</li>
-                </ul>
-                <ul class="nav navbar-nav pull-right col-md-6 col-lg-push-4 col-xs-10">
-                    <li>
-                        @using (Ajax.BeginForm("Search", null, new AjaxOptions
-                        {
-                            InsertionMode = InsertionMode.Replace,
-                            UpdateTargetId = "VechicleListContainer",
-                            HttpMethod = "POST"
-                        }, new { @class = "form-horizontal", role = "form" }))
-                        {
-                            
-                            <div class="input-group col-md-6 col-xs-7">
-
-                                <div class="input-group-btn">
-                                    @Html.AntiForgeryToken()
-                                    <input type="search" class="form-control" placeholder="Owner" name="SearchOwner" id="SearchOwner" />
-
-                                    <button class="btn btn-primary" type="submit"><span class="glyphicon glyphicon-search"></span></button>
-                                    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <span class="caret"></span>
-                                        <span class="sr-only">Toggle Dropdown</span>
-                                    </button>
-                                    <div class="dropdown-menu dropdown-menu-right" role="menu">
-                                        <label for="SearchRegNr" style="margin:0;margin-left: 7px;">Regestration Number</label>
-                                        <div class="form-group" style="margin: 5px">
-                                            <input type="search" class="form-control" placeholder="Regestration" name="SearchRegNr" id="SearchRegNr" />
-                                        </div>
-                                        <div role="separator" class="divider"></div>
-                                        <label for="SearchColor" style="margin:0;margin-left: 7px;">Color</label>
-                                        <div class="form-group" style="margin: 5px">
-                                            <input type="search" class="form-control" placeholder="Color" name="SearchColor" id="SearchColor" />
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        }
-                    <li>
                 </ul>
             </div>
         </div>

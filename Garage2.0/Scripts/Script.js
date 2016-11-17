@@ -5,7 +5,11 @@
     */
     $("#general-alert").hide();
 
-    $('.datepickercheckin').datetimepicker();
+    $('.date').datetimepicker({
+        format: "D/M, H:m",
+        sideBySide: true
+    });
+
 
     $('body').on("submit", "#modalForm", FormSubmitted);
 
@@ -14,6 +18,9 @@
         trigger: 'focus',
         viewport: 'body'
     });
+
+    $('#VehicleType').multiselect({ multiple: true, includeSelectAllOption: true, selectAllValue: 'All', numberDisplayed: 1, selectAllText: 'All'  });
+
 });
 
 var FormSubmitted = function () {
@@ -41,6 +48,10 @@ var FormSuccess = function (data) {
     refreshVehicleList();
 };
 
+var buildTable = function () {
+    $('.table').bootstrapTable();
+};
+
 var refreshVehicleList = function () {
     var options = {
         url: "/Home/Index",
@@ -49,7 +60,7 @@ var refreshVehicleList = function () {
 
     $.ajax(options).done(function (data) {
         $('#VechicleListContainer').html(data);
-        $('.table').bootstrapTable();
+        buildTable();
     });
 };
 
