@@ -477,6 +477,7 @@
     <Content Include="Views\Home\Checkout.cshtml" />
     <Content Include="Views\Home\Details.cshtml" />
     <Content Include="Views\Home\Edit.cshtml" />
+    <Content Include="Views\Home\FilterVehicle.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Ultilities\" />
