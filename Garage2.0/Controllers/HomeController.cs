@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Reflection;
 using System.Web;
 using System.Web.Mvc;
 
@@ -23,13 +24,13 @@ namespace Garage2._0.Controllers
             return View(Garage.GetVehicles());
         }
 
-        
+
         [ValidateAntiForgeryToken]
-        public ActionResult Search([Bind(Include = "SearchOwner, SearchRegNr, SearchColor, VehicleType")]VehicleQuery target, string InTimeFilter, string OutTimeFilter)
+        public ActionResult Search([Bind(Include = "SearchOwner, SearchRegNr, SearchColor, VehicleType")]VehicleQuery target, string InTimeFilter, string OutTimeFilter, string Checkedin, string Checkedout)
         {
-            //HttpContext.Request.InputStream.Position = 0;
-            //var result = new System.IO.StreamReader(HttpContext.Request.InputStream).ReadToEnd();
-            if(!string.IsNullOrEmpty(InTimeFilter))
+            HttpContext.Request.InputStream.Position = 0;
+            var result = new System.IO.StreamReader(HttpContext.Request.InputStream).ReadToEnd();
+            if (!string.IsNullOrEmpty(InTimeFilter))
                 target.InTimeFilter = DateTime.ParseExact(InTimeFilter, "d/M, H:m", CultureInfo.InvariantCulture);
             if (!string.IsNullOrEmpty(OutTimeFilter))
                 target.OutTimeFilter = DateTime.ParseExact(OutTimeFilter, "d/M, H:m", CultureInfo.InvariantCulture);
@@ -45,7 +46,7 @@ namespace Garage2._0.Controllers
                 }
                 if (target.SearchRegNr == null)
                 {
-                     target.SearchRegNr = "";
+                    target.SearchRegNr = "";
                 }
                 if (target.VehicleType == null)
                 {
@@ -58,7 +59,17 @@ namespace Garage2._0.Controllers
                 if (target.OutTimeFilter == null)
                 {
                     target.OutTimeFilter = new DateTime(3000, 1, 1);
+
                 }
+                if (Checkedin == "on")
+                    target.Checkedin = true;
+                else
+                    target.Checkedin = false;
+
+                if (Checkedout == "on")
+                    target.Checkedout = true;
+                else
+                    target.Checkedout = false;
             }
             if (Request.IsAjaxRequest())
             {
@@ -74,46 +85,103 @@ namespace Garage2._0.Controllers
             return View(Garage.GetVehicles(target));
         }
 
-        public ActionResult Checkin()
+
+        public ActionResult Create()
         {
             if (Request.IsAjaxRequest())
             {
-                return PartialView("Checkin", new Vehicle());
+                return PartialView("Create", new CreateViewModel());
             }
-
             return RedirectToAction("Index");
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Checkin([Bind(Include ="RegNr, Owner, Color, VehicleType, NumberOfWheels, InTime, OutTime")]Vehicle newVehicle)
+        public ActionResult Create([Bind(Include = "RegNr, Owner, Color, VehicleType, NumberOfWheels, InTime, OutTime")]CreateViewModel newVehicle)
         {
             if (ModelState.IsValid && Request.IsAjaxRequest())
             {
-                if (!newVehicle.InTime.HasValue) // server side check for inTime
+                /// default vehicle prices from the model Prices.cs
+                string vtype = Enum.GetNames(typeof(prices)).Single(n => n.Equals(newVehicle.VehicleType.ToString()));
+                int price = (int)Enum.Parse(typeof(prices), vtype);
+                
+
+                //newVehicle.TotalMoneyAmount = price;
+                Vehicle v = new Vehicle();
+
+                foreach (PropertyInfo p in typeof(CreateViewModel).GetProperties())
                 {
-                    TempData["ErrorMessage"] = "Invalid Data!";
-                    return PartialView("Checkin", newVehicle);
+                    PropertyInfo modelproperty = typeof(CreateViewModel).GetProperty(p.Name);
+                    PropertyInfo vehicleproperty = typeof(Vehicle).GetProperty(p.Name);
+
+                    vehicleproperty.SetValue(v, modelproperty.GetValue(newVehicle));
+                }
+
+                if(Garage.AddVehicle(v).exist == false)
+                    return Json(new { type = true, message = string.Format("Vehicle {0} was created", v.RegNr), function = "Checkin", id = v.Id });
+                else
+                    return Json(new { type = true, message = string.Format("Vehicle {0} Already exist", v.RegNr), function = "Checkin", id = v.Id });
+            }
+            return RedirectToAction("Index");
+        }
+
+        public ActionResult Checkin(int? id)
+        {
+            if (Request.IsAjaxRequest())
+            {
+                if (id != null)
+                {
+                    Vehicle v = Garage.GetVehicle(id.Value);
+                    CheckInViewModel checkinviewmodel = new CheckInViewModel();
+
+
+                    foreach (PropertyInfo p in typeof(CheckInViewModel).GetProperties())
+                    {
+                        PropertyInfo modelproperty = typeof(CheckInViewModel).GetProperty(p.Name);
+                        PropertyInfo vehicleproperty = typeof(Vehicle).GetProperty(p.Name);
+
+                        if (vehicleproperty != null)
+                            if (vehicleproperty.GetValue(v) != null)
+                                modelproperty.SetValue(checkinviewmodel, vehicleproperty.GetValue(v));
+                    }
+
+                    checkinviewmodel.vehicle = v;
+
+                    return PartialView("Checkin", checkinviewmodel);
                 }
                 else
                 {
-                    
-                    /* /// default vehicle prices from the model Prices.cs
-                    string priceName = Enum.GetNames(typeof(prices)).Single(n => n.Equals(newVehicle.VehicleType.ToString()));
-                    int price = (int)Enum.Parse(typeof(prices), priceName);
-
-                    newVehicle.price = price;*/
-
-                    Garage.AddVehicle(newVehicle);
-                    return Json(new { type = true, message = string.Format("Vehicle {0} was checked in", newVehicle.RegNr) });
+                    return PartialView("Create", new Vehicle());
                 }
             }
             return RedirectToAction("Index");
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Checkin([Bind(Include = "Id, InTime, OutTime, Checkedin")]CheckInViewModel newVehicle)
+        {
+            if (ModelState.IsValid && Request.IsAjaxRequest())
+            {
+                Garage.CheckInVehicle(newVehicle);
+
+                return Json(new { type = true, message = "Vehicle Checked in!" });
+            }
+
+            return RedirectToAction("Index");
+        }
+
         public ActionResult Checkout(int? id)
         {
-            return View(Garage.GetVehicle(id.Value));
+            if (id != null)
+            {
+                Vehicle v = Garage.GetVehicle(id.Value);
+                CheckOutViewModel checkoutviewmodel = new CheckOutViewModel { vehicle = v };
+
+                return PartialView("Checkout", checkoutviewmodel);
+            }
+            else
+                return RedirectToAction("Index");
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -135,7 +203,7 @@ namespace Garage2._0.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include ="Id,RegNr, Owner, Color, VehicleType, NumberOfWheels, InTime, OutTime")]Vehicle newVehicle)
+        public ActionResult Edit([Bind(Include = "Id,RegNr, Owner, Color, VehicleType, NumberOfWheels, InTime, OutTime")]Vehicle newVehicle)
         {
             if (ModelState.IsValid && Request.IsAjaxRequest())
             {
@@ -150,13 +218,13 @@ namespace Garage2._0.Controllers
                     return Json(new { type = true, message = "Item Edited!" });
                 }
             }
-            
+
             return RedirectToAction("Index");
         }
 
         public ActionResult Details(int id)
         {
-            if(Request.IsAjaxRequest())
+            if (Request.IsAjaxRequest())
                 return PartialView("Details", Garage.GetVehicle(id));
 
             return RedirectToAction("Index");

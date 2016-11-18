@@ -39,6 +39,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AutoMapper">
+      <HintPath>..\packages\AutoMapper.4.2.1\lib\net45\AutoMapper.dll</HintPath>
+    </Reference>
     <Reference Include="EntityFramework">
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
@@ -126,11 +129,15 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\CheckInViewModel.cs" />
+    <Compile Include="Models\CheckOutViewModel.cs" />
+    <Compile Include="Models\CreateViewModel.cs" />
     <Compile Include="Models\Prices.cs" />
     <Compile Include="Models\Vehicle.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\GarageRepository.cs" />
     <Compile Include="Models\VehicleQuery.cs" />
+    <Compile Include="Ultilities\Conversions.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Data\GarageDb.mdf" />
@@ -477,14 +484,13 @@
     <Content Include="Views\Home\VehiclesList.cshtml" />
     <Content Include="Views\Home\Results.cshtml" />
     <Content Include="Views\Home\Search.cshtml" />
-    <Content Include="Views\Home\Checkin.cshtml" />
+    <Content Include="Views\Home\Create.cshtml" />
     <Content Include="Views\Home\Checkout.cshtml" />
     <Content Include="Views\Home\Details.cshtml" />
     <Content Include="Views\Home\Edit.cshtml" />
+    <Content Include="Views\Home\Checkin.cshtml" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Ultilities\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="packages.config" />
     <None Include="Project_Readme.html" />

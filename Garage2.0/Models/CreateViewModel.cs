@@ -7,38 +7,23 @@ using System.Web;
 
 namespace Garage2._0.Models
 {
-    public class Vehicle
+    public class CreateViewModel
     {
         [Key]
         public int Id { get; set; }
-
+        [Required]
         public string Owner { get; set; }
-
+        [Required]
+        [StringLength(6, MinimumLength = 6, ErrorMessage = "Registration Number must have exactly six characters")]
         public string RegNr { get; set; }
-
+        [Required]
         public string Color { get; set; }
-
+        [Required]
+        [Range(0, 20, ErrorMessage = "Wrong number of wheels")]
+        [DisplayName("Number of wheels")]
         public int NumberOfWheels { get; set; }
 
-        public Vehicles VehicleType { get; set; } 
-
-        public DateTime? InTime { get; set; }
-
-        public DateTime? OutTime { get; set; }
-
-        DateTime RentTill { get; set; }
-
-        public bool Checkedin { get; set; }
-
-
+        [Required]
+        public Vehicles VehicleType { get; set; }
     }
-
-    public enum Vehicles
-    {
-        Car,
-        Truck,
-        Boat,
-        Motorcycle
-    }
-    
 }

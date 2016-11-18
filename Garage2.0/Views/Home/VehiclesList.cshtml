@@ -11,16 +11,16 @@
             <th data-sortable="true">
                 @Html.DisplayNameFor(model => model.Color)
             </th>
-            <th data-sortable="true">
+            <th data-sortable="true" class="hidden-xs">
                 @Html.DisplayNameFor(model => model.NumberOfWheels)
             </th>
-            <th data-sortable="true">
+            <th data-sortable="true" class="hidden-xs">
                 @Html.DisplayNameFor(model => model.VehicleType)
             </th>
-            <th data-sortable="true">
+            <th data-sortable="true" class="hidden-sm hidden-xs">
                 @Html.DisplayNameFor(model => model.InTime)
             </th>
-            <th data-sortable="true">
+            <th data-sortable="true" class="hidden-sm hidden-xs">
                 @Html.DisplayNameFor(model => model.OutTime)
             </th>
             <!--<th>@@Html.DisplayNameFor(model => model.Price)</th>-->
@@ -61,13 +61,27 @@
                              HttpMethod = "GET",
                              OnSuccess = "ModalLoaded"
                          }, new { target = "_self" }) | 
-                    @Ajax.ActionLink("Check out", "Checkout", new { id = item.Id }, new AjaxOptions
-                         {
-                             InsertionMode = InsertionMode.Replace,
-                             UpdateTargetId = "ModalContainer",
-                             HttpMethod = "GET",
-                             OnSuccess = "ModalLoaded"
-                         }, new { target = "_self" })
+                    @if(item.Checkedin)
+                    {
+                        @Ajax.ActionLink("Check out", "Checkout", new { id = item.Id }, new AjaxOptions
+                        {
+                            InsertionMode = InsertionMode.Replace,
+                            UpdateTargetId = "ModalContainer",
+                            HttpMethod = "GET",
+                            OnSuccess = "ModalLoaded"
+                        }, new { target = "_self" })
+
+                    }
+                    else
+                    {
+                        @Ajax.ActionLink("Check in", "Checkin", new { id = item.Id }, new AjaxOptions
+                        {
+                            InsertionMode = InsertionMode.Replace,
+                            UpdateTargetId = "ModalContainer",
+                            HttpMethod = "GET",
+                            OnSuccess = "ModalLoaded"
+                        }, new { target = "_self" })
+                    }
                     </td>
                 </tr>
         }

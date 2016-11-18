@@ -27,9 +27,9 @@ namespace Garage2._0.Migrations
             //      new Person { FullName = "Rowan Miller" }
             //    );
             // 2016, 11, 14, 10, 42, 0
-            context.Vehicles.AddOrUpdate(r => r.RegNr,
-                new Vehicle { RegNr = "ABC123", Color = "Black", Owner = "Donald Trump", VehicleType = Vehicles.Car, NumberOfWheels = 4, InTime = new DateTime(2016, 11, 14, 10, 42, 0) },
-                new Vehicle { RegNr = "ABC124", Color = "Black", Owner = "Donald Trum", VehicleType = Vehicles.Car, NumberOfWheels = 4, InTime = new DateTime(2016, 11, 14, 11, 14, 0) });
+            //context.Vehicles.AddOrUpdate(r => r.RegNr,
+            //    new Vehicle { RegNr = "ABC123", Color = "Black", Owner = "Donald Trump", VehicleType = Vehicles.Car, NumberOfWheels = 4, InTime = new DateTime(2016, 11, 14, 10, 42, 0) },
+            //    new Vehicle { RegNr = "ABC124", Color = "Black", Owner = "Donald Trum", VehicleType = Vehicles.Car, NumberOfWheels = 4, InTime = new DateTime(2016, 11, 14, 11, 14, 0) });
         }
     }
 }

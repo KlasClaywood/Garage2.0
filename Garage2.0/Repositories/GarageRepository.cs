@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
+using System.Reflection;
 using System.Web;
 
 namespace Garage2._0.Repositories
@@ -19,10 +20,10 @@ namespace Garage2._0.Repositories
 
         public IEnumerable<Vehicle> GetVehicles()
         {
-            List<Vehicle> vehicles = Context.Vehicles.ToList();
+            List<Vehicle> vehicles = Context.Vehicles.Where(v=> v.Checkedin).ToList();
 
             // needs fixing and changing
-            for (int i = 0; i < vehicles.Count(); i+=1 )
+            /*for (int i = 0; i < vehicles.Count(); i+=1 )
             {
                 if (vehicles[i].OutTime >= DateTime.Now)
                 {
@@ -39,7 +40,7 @@ namespace Garage2._0.Repositories
                 {
 
                 }
-            }
+            }*/
             
             return vehicles;
         }
@@ -47,24 +48,16 @@ namespace Garage2._0.Repositories
         public IEnumerable<Vehicle> GetVehicles(VehicleQuery target)
         {
             IEnumerable<Vehicle> svar = Context.Vehicles.Where(v =>
-                                          v.Color.Contains(target.SearchColor) &&
-                                          v.Owner.Contains(target.SearchOwner) &&
-                                          v.RegNr.Contains(target.SearchRegNr) &&
-                                          target.VehicleType.Any(t => t.Equals(v.VehicleType.ToString())) &&
-                                          v.InTime >= target.InTimeFilter
+                                            v.Color.Contains(target.SearchColor) &&
+                                            v.Owner.Contains(target.SearchOwner) &&
+                                            v.RegNr.Contains(target.SearchRegNr) &&
+                                            target.VehicleType.Any(t => t.Equals(v.VehicleType.ToString())) &&
+                                            (v.InTime == null ? default(DateTime) <= target.InTimeFilter : v.InTime >= target.InTimeFilter)  &&
+                                            (v.OutTime == null ? default(DateTime) <= target.OutTimeFilter : v.OutTime <= target.OutTimeFilter) && 
+                                            (v.Checkedin == target.Checkedin ||
+                                            v.Checkedin != target.Checkedout)
                                           );
-
-            IEnumerable<Vehicle> svar1 = Context.Vehicles.Where(v =>
-                                        v.Color.Contains(target.SearchColor) &&
-                                        v.Owner.Contains(target.SearchOwner) &&
-                                        v.RegNr.Contains(target.SearchRegNr) &&
-                                        target.VehicleType.Any(t => t.Equals(v.VehicleType.ToString())) &&
-                                        v.InTime >= target.InTimeFilter &&
-                                        v.OutTime <= target.OutTimeFilter
-                ).Union(svar);
-
-
-            return svar1;
+            return svar;
         }
 
         public Vehicle GetVehicle(int id)
@@ -72,7 +65,12 @@ namespace Garage2._0.Repositories
             return Context.Vehicles.Find(id);
         }
 
-        public void AddVehicle(Vehicle newVehicle)
+        public Vehicle GetVehicle(Vehicle V)
+        {
+            return Context.Vehicles.Single(v => v == V);
+        }
+
+        public dynamic AddVehicle(Vehicle newVehicle)
         {
             //Vehicle oldVehicle = Context.Vehicles.First(v => v.RegNr == newVehicle.RegNr);
             //if(oldVehicle != null)
@@ -82,14 +80,27 @@ namespace Garage2._0.Repositories
             //}
             //else
             //{
-            if(newVehicle != null)
+
+            bool Exist = GetVehicles().ToList().Exists(v => v.RegNr == newVehicle.RegNr);
+
+            if (Exist)
+            {
+                return new { exist = Exist, Id = getVehicleByRegNr(newVehicle.RegNr).Id };
+            }
+            else
             {
                 Context.Vehicles.Add(newVehicle);
                 Context.SaveChanges();
+                return new { exist = Exist, Id = getVehicleByRegNr(newVehicle.RegNr).Id };
             }
-                
+
             //}
             
+        }
+
+        public Vehicle getVehicleByRegNr(string regnr)
+        {
+            return Context.Vehicles.First(v => v.RegNr == regnr);
         }
 
         public bool RemoveVehicle(int id)
@@ -97,7 +108,8 @@ namespace Garage2._0.Repositories
             Vehicle VToRemove = Context.Vehicles.Find(id);
             if (VToRemove != null)
             {
-                Context.Vehicles.Remove(Context.Vehicles.Find(id));
+                VToRemove.Checkedin = false;
+                VToRemove.OutTime = DateTime.Now;
                 Context.SaveChanges();
                 return true;
             }
@@ -106,9 +118,48 @@ namespace Garage2._0.Repositories
 
         public void EditVehicle(Vehicle newVehicle)
         {
-            Context.Entry(newVehicle).State = EntityState.Modified;
+            Vehicle v =  Context.Vehicles.Find(newVehicle.Id);
+
+            //Context.Entry(v).State = EntityState.Modified;
+
+            foreach (PropertyInfo p in typeof(Vehicle).GetProperties())
+            {
+                PropertyInfo vehicleproperty = typeof(Vehicle).GetProperty(p.Name);
+                if (vehicleproperty.GetValue(newVehicle) != null)
+                    vehicleproperty.SetValue(v, vehicleproperty.GetValue(newVehicle));
+            }
+
+            //Context.Vehicles.Find(newVehicle.Id) = v;
 
             Context.SaveChanges();
         }
+
+        public void CheckInVehicle(CheckInViewModel newVehicle)
+        {
+            Vehicle v = Context.Vehicles.Find(newVehicle.Id);
+
+            //Context.Entry(v).State = EntityState.Modified;
+
+            foreach (PropertyInfo p in typeof(Vehicle).GetProperties())
+            {
+                PropertyInfo vehicleproperty = typeof(Vehicle).GetProperty(p.Name);
+                PropertyInfo newvehicleproperty = typeof(CheckInViewModel).GetProperty(p.Name);
+                if(newvehicleproperty != null)
+                    if (newvehicleproperty.GetValue(newVehicle) != null)
+                        vehicleproperty.SetValue(v, newvehicleproperty.GetValue(newVehicle));
+            }
+
+            if (!newVehicle.InTime.HasValue) // server side check for inTime
+                v.InTime = DateTime.Now;
+
+            if (v.InTime >= (newVehicle.OutTime ?? default(DateTime)))
+                v.OutTime = null;
+
+            //Context.Vehicles.Find(newVehicle.Id) = v;
+
+            Context.SaveChanges();
+        }
+
+        
     }
 }
