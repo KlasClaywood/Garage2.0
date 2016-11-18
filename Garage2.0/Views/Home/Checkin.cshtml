@@ -58,8 +58,13 @@
 
                         <div class="form-group">
                             @Html.LabelFor(model => model.InTime, htmlAttributes: new { @class = "control-label col-md-2" })
-                            <div class="col-md-10">
-                                <input type='text' class="form-control datepickercheckin" id='datetimepickerin' name="InTime" />
+                            <div class="col-sm-6">
+                                <div class='input-group date datepickercheckin' id='datetimepickerin'>
+                                    <input type='text' class="form-control" name="InTime"/>
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
                                 @{
                     if (TempData["ErrorMessage"] != "" || TempData["ErrorMessage"] != null)
                     {
@@ -73,8 +78,13 @@
 
                         <div class="form-group">
                             @Html.LabelFor(model => model.OutTime, htmlAttributes: new { @class = "control-label col-md-2" })
-                            <div class="col-md-10">
-                                <input type='text' class="form-control datepickercheckin" id='datetimepickerout' name="OutTime" />
+                            <div class="col-sm-6">
+                                <div class='input-group date datepickercheckin'>
+                                    <input type='text' class="form-control" name="OutTime" id='datetimepickerout' />
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
                                 @{
                     if (TempData["ErrorMessage"] != "" || TempData["ErrorMessage"] != null)
                     {
@@ -97,5 +107,8 @@
 </div><!-- /.modal -->
 
 <script>
-    $('.datepickercheckin').datetimepicker();
+    $('.datepickercheckin').datetimepicker({
+        useCurrent: true,
+    });
+
 </script>

@@ -3,16 +3,85 @@
 @{
     ViewBag.Title = "Index";
 }
-<div class="alert text-center" role="alert" id="general-alert">
-</div>
+        <div class="alert text-center" role="alert" id="general-alert">
+        </div>
 
-<h2>Index</h2>
+        <h2>Vehicles</h2>
+        <div class="row">
+            <div class="col-lg-12 col-lg-push-6 col-md-12 col-md-push-5 col-xs-12 col-sm-12 col-sm-push-1">
+
+                @using (Ajax.BeginForm("Search", "Home", null, new AjaxOptions
+                                {
+                                    InsertionMode = InsertionMode.Replace,
+                                    UpdateTargetId = "VechicleListContainer",
+                                    HttpMethod = "POST",
+                                    OnSuccess = "buildTable"
+                                }, new { @class = "form-inline", role = "form", id = "SearchForm" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <div class="form-group col-md-9 col-xs-5">
+                        <div class="input-group-btn">
+
+                            <input type="search" class="form-control" placeholder="Owner" name="SearchOwner" id="SearchOwner" />
+
+                            <button class="btn btn-primary" type="submit" form="SearchForm"><span class="glyphicon glyphicon-search"></span></button>
+
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <span class="caret"></span>
+                                </button>
+
+                                <div class="dropdown-menu dropdown-menu-right" role="menu">
+                                    <div class="input-group" style="margin: 5px">
+                                        <label for="SearchRegNr" style="margin:0;margin-left: 7px;">Regestration Number</label>
+                                        <input type="search" class="form-control" placeholder="Regestration" name="SearchRegNr" id="SearchRegNr" />
+                                    </div>
+                                    <div role="separator" class="divider"></div>
+                                    <div class="input-group" style="margin: 5px">
+                                        <label for="SearchColor" style="margin:0;margin-left: 7px;">Color</label>
+                                        <input type="search" class="form-control" placeholder="Color" name="SearchColor" id="SearchColor" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </button>
+
+                                <div class="dropdown-menu dropdown-menu-right" role="menu">
+                                    <label style="margin:0;margin-left: 7px;">Date Range</label>
+                                    <div role="separator" class="divider"></div>
+                                    <div class="input-group" style="margin: 5px">
+                                        <label for="InTimeFilter" style="margin:0;margin-left: 7px;">From</label>
+                                        <input type="text" class="form-control date" name="InTimeFilter" />
+                                    </div>
+                                    <div role="separator" class="divider"></div>
+                                    <div class="input-group" style="margin: 5px">
+                                        <label for="OutTimeFilter" style="margin:0;margin-left: 7px;">To</label>
+                                        <input type="text" class="form-control date" name="OutTimeFilter" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <select name="VehicleType[]" id="VehicleType" class="btn-primary pull-left" multiple="multiple">
+                                @{foreach (var v in typeof(Vehicles).GetEnumNames())
+                                  {
+                                    <option value=@v selected>@v</option>
+                                  }
+                                }
+                            </select>
+
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+        <br />
+        <div id="VechicleListContainer">
+            @Html.Partial("VehiclesList", Model)
+        </div>
 
 
-<div id="VechicleListContainer">
-    @Html.Partial("VehiclesList", Model)
-</div>
 
-
-
-<div id="ModalContainer"></div>
+        <div id="ModalContainer"></div>

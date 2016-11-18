@@ -1,0 +1,29 @@
+﻿
+@{
+    ViewBag.Title = "FilterVehicle";
+}
+
+<br />
+<h3>Filter Vehicle</h3>
+
+@using (Html.BeginForm("FilterVehicle", "Home"))
+{
+    <label>@Html.RadioButton("fordon", "Car", true)Car</label><br />
+    <label>@Html.RadioButton("fordon", "Truck", false)Truck</label><br />
+    <label>@Html.RadioButton("fordon", "Boat", true)Boat</label><br />
+    <label>@Html.RadioButton("fordon", "Motorcycle", true)Motorcycle</label><br />
+    <br />
+    <input type="submit" value=" Submit" />
+}
+<br /> 
+<h3>Filter InDate</h3>
+
+@using (Html.BeginForm("FilterInDate", "Home"))
+{
+    <label>@Html.RadioButton("indatum", "Today", true)Today</label><br />
+    <label>@Html.RadioButton("indatum", "Week", false)Week</label><br />
+    <label>@Html.RadioButton("indatum", "Month", true)Month</label><br />
+    <label>@Html.RadioButton("indatum", "Year", true)Year</label><br />
+    <br />
+    <input type="submit" value=" Submit" />
+} 

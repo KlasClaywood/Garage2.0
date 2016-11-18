@@ -19,7 +19,29 @@ namespace Garage2._0.Repositories
 
         public IEnumerable<Vehicle> GetVehicles()
         {
-            return Context.Vehicles;
+            List<Vehicle> vehicles = Context.Vehicles.ToList();
+
+            // needs fixing and changing
+            for (int i = 0; i < vehicles.Count(); i+=1 )
+            {
+                if (vehicles[i].OutTime >= DateTime.Now)
+                {
+                    TimeSpan difference = (vehicles[i].OutTime ?? DateTime.Now) - DateTime.Now;
+
+                    int daycount = difference.Days;
+
+
+                    // fine him by increasing the payment for a vehicle by day count
+                    // vehicles[i].price = (price * 2) * daycount
+                }
+
+                if (vehicles[i].OutTime > DateTime.Now && vehicles[i].InTime < DateTime.Now) // if vehicle still exist in the garage.
+                {
+
+                }
+            }
+
+            return vehicles.OrderBy(v => v.VehicleType).ThenByDescending(v => v.InTime);
         }
 
         public IEnumerable<Vehicle> GetVehicles(VehicleQuery target)
@@ -27,13 +49,26 @@ namespace Garage2._0.Repositories
             IEnumerable<Vehicle> svar = Context.Vehicles.Where(v =>
                                           v.Color.Contains(target.SearchColor) &&
                                           v.Owner.Contains(target.SearchOwner) &&
-                                          v.RegNr.Contains(target.SearchRegNr)
+                                          v.RegNr.Contains(target.SearchRegNr) &&
+                                          target.VehicleType.Any(t => t.Equals(v.VehicleType.ToString())) &&
+                                          v.InTime >= target.InTimeFilter                                          
                                           );
-            return svar;
+
+            IEnumerable<Vehicle> svar1 = Context.Vehicles.Where(v =>
+                                        v.Color.Contains(target.SearchColor) &&
+                                        v.Owner.Contains(target.SearchOwner) &&
+                                        v.RegNr.Contains(target.SearchRegNr) &&
+                                        target.VehicleType.Any(t => t.Equals(v.VehicleType.ToString())) &&
+                                        v.InTime >= target.InTimeFilter &&
+                                        v.OutTime <= target.OutTimeFilter
+                ).Union(svar);
+            
+            return svar1.OrderBy(v => v.VehicleType).ThenByDescending(v => v.InTime);
         }
 
         public Vehicle GetVehicle(int id)
         {
+            ////return Context.Vehicles.Find(id);
             return Context.Vehicles.Find(id);
         }
 
@@ -74,6 +109,52 @@ namespace Garage2._0.Repositories
             Context.Entry(newVehicle).State = EntityState.Modified;
 
             Context.SaveChanges();
+        }
+
+        public IEnumerable<Vehicle> FilterVehicle(string fordon)
+        {
+            Vehicles answer = new Vehicles();
+
+            if ("Car" == fordon)
+                answer = Vehicles.Car;
+            else if ("Truck" == fordon)
+                answer = Vehicles.Truck;
+            else if ("Boat" == fordon)
+                answer = Vehicles.Boat;
+            else if ("Motorcycle" == fordon)
+                answer = Vehicles.Motorcycle;
+
+            IEnumerable<Vehicle> outanswer = from i in Context.Vehicles
+                                        where i.VehicleType == answer
+                                        select i;
+            return outanswer;
+        }
+
+        public IEnumerable<Vehicle> FilterInDate(string indatum)
+        {
+            var tmp = DateTime.Today.AddDays(7);
+            DateTime MinusSeven = DateTime.Today.AddDays(-7);
+
+            IEnumerable<Vehicle> outanswer; // = new IEnumerable<Vehicle>();
+            if (indatum == "Today")
+            {
+                outanswer = from i in Context.Vehicles
+                            where i.InTime.Value.Date == DateTime.Today.Date
+                            select i;
+            }
+            else if (indatum == "Week")
+            {
+                outanswer = from i in Context.Vehicles
+                            where i.InTime.Value.AddDays(0) >= MinusSeven
+                            select i;
+            }
+            else
+            { 
+            outanswer = from i in Context.Vehicles
+                        where i.InTime.Value.AddDays(0) == DateTime.Today.AddDays(7)
+                        select i;
+            }
+             return outanswer;
         }
     }
 }

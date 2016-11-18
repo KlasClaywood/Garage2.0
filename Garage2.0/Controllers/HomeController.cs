@@ -3,6 +3,7 @@ using Garage2._0.Models;
 using Garage2._0.Repositories;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -22,14 +23,16 @@ namespace Garage2._0.Controllers
             return View(Garage.GetVehicles());
         }
 
-        public ActionResult Search()
-        {
-            return View();
-        }
-        [HttpPost]
+        
         [ValidateAntiForgeryToken]
-        public ActionResult Search([Bind(Include ="SearchOwner, SearchRegNr, SearchColor")]VehicleQuery target)
+        public ActionResult Search([Bind(Include = "SearchOwner, SearchRegNr, SearchColor, VehicleType")]VehicleQuery target, string InTimeFilter, string OutTimeFilter)
         {
+            //HttpContext.Request.InputStream.Position = 0;
+            //var result = new System.IO.StreamReader(HttpContext.Request.InputStream).ReadToEnd();
+            if(!string.IsNullOrEmpty(InTimeFilter))
+                target.InTimeFilter = DateTime.ParseExact(InTimeFilter, "d/M, H:m", CultureInfo.InvariantCulture);
+            if (!string.IsNullOrEmpty(OutTimeFilter))
+                target.OutTimeFilter = DateTime.ParseExact(OutTimeFilter, "d/M, H:m", CultureInfo.InvariantCulture);
             if (target != null)
             {
                 if (target.SearchColor == null)
@@ -42,10 +45,28 @@ namespace Garage2._0.Controllers
                 }
                 if (target.SearchRegNr == null)
                 {
-                    target.SearchRegNr = "";
+                     target.SearchRegNr = "";
+                }
+                if (target.VehicleType == null)
+                {
+                    target.VehicleType = typeof(Vehicles).GetEnumNames().Select(v => v);
+                }
+                if (target.InTimeFilter == null)
+                {
+                    target.InTimeFilter = new DateTime(2000, 1, 1);
+                }
+                if (target.OutTimeFilter == null)
+                {
+                    target.OutTimeFilter = new DateTime(3000, 1, 1);
                 }
             }
-            return View("Results", Garage.GetVehicles(target));
+            if (Request.IsAjaxRequest())
+            {
+                return PartialView("VehiclesList", Garage.GetVehicles(target));
+            }
+
+            return RedirectToAction("Index");
+            //return View("Results", Garage.GetVehicles(target));
         }
 
         public ActionResult Results(VehicleQuery target)
@@ -76,6 +97,13 @@ namespace Garage2._0.Controllers
                 }
                 else
                 {
+                    
+                    /* /// default vehicle prices from the model Prices.cs
+                    string priceName = Enum.GetNames(typeof(prices)).Single(n => n.Equals(newVehicle.VehicleType.ToString()));
+                    int price = (int)Enum.Parse(typeof(prices), priceName);
+
+                    newVehicle.price = price;*/
+
                     Garage.AddVehicle(newVehicle);
                     return Json(new { type = true, message = string.Format("Vehicle {0} was checked in", newVehicle.RegNr) });
                 }
@@ -128,7 +156,26 @@ namespace Garage2._0.Controllers
 
         public ActionResult Details(int id)
         {
-            return View(Garage.GetVehicle(id));
+            if(Request.IsAjaxRequest())
+                return PartialView("Details", Garage.GetVehicle(id));
+
+            return RedirectToAction("Index");
+        }
+
+        public ActionResult PFilterVehicle(string fordon = "")
+        {            
+            if(fordon == "")
+                return View();
+            else
+                return View("Index", Garage.FilterVehicle(fordon));
+        }
+
+        public ActionResult PFilterInDate(string indatum = "")
+        {
+            if (indatum == "")
+                return View();
+            else
+                return View("Index", Garage.FilterInDate(indatum));
         }
     }
 }
