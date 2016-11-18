@@ -20,28 +20,8 @@ namespace Garage2._0.Repositories
 
         public IEnumerable<Vehicle> GetVehicles()
         {
-            List<Vehicle> vehicles = Context.Vehicles.Where(v=> v.Checkedin).ToList();
+            List<Vehicle> vehicles = Context.Vehicles.Where(v=> v.Checkedin).OrderBy(v => v.VehicleType).ThenByDescending(v => v.InTime).ToList();
 
-            // needs fixing and changing
-            /*for (int i = 0; i < vehicles.Count(); i+=1 )
-            {
-                if (vehicles[i].OutTime >= DateTime.Now)
-                {
-                    TimeSpan difference = (vehicles[i].OutTime ?? DateTime.Now) - DateTime.Now;
-
-                    int daycount = difference.Days;
-
-
-                    // fine him by increasing the payment for a vehicle by day count
-                    // vehicles[i].price = (price * 2) * daycount
-                }
-
-                if (vehicles[i].OutTime > DateTime.Now && vehicles[i].InTime < DateTime.Now) // if vehicle still exist in the garage.
-                {
-
-                }
-            }*/
-            
             return vehicles;
         }
 
@@ -56,7 +36,7 @@ namespace Garage2._0.Repositories
                                             (v.OutTime == null ? default(DateTime) <= target.OutTimeFilter : v.OutTime <= target.OutTimeFilter) && 
                                             (v.Checkedin == target.Checkedin ||
                                             v.Checkedin != target.Checkedout)
-                                          );
+                                          ).OrderBy(v => v.VehicleType).ThenByDescending(v => v.InTime);
             return svar;
         }
 
@@ -108,8 +88,7 @@ namespace Garage2._0.Repositories
             Vehicle VToRemove = Context.Vehicles.Find(id);
             if (VToRemove != null)
             {
-                VToRemove.Checkedin = false;
-                VToRemove.OutTime = DateTime.Now;
+                Context.Vehicles.Remove(VToRemove);
                 Context.SaveChanges();
                 return true;
             }
@@ -160,6 +139,18 @@ namespace Garage2._0.Repositories
             Context.SaveChanges();
         }
 
+        public bool CheckOutVehicle(int id)
+        {
+            Vehicle VToRemove = Context.Vehicles.Find(id);
+            if (VToRemove != null)
+            {
+                VToRemove.Checkedin = false;
+                VToRemove.OutTime = DateTime.Now;
+                Context.SaveChanges();
+                return true;
+            }
+            return false;
+        }
         
     }
 }

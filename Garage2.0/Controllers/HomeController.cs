@@ -183,17 +183,43 @@ namespace Garage2._0.Controllers
             else
                 return RedirectToAction("Index");
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Checkout(int id)
         {
-            if (Garage.RemoveVehicle(id))
+            if (Garage.CheckOutVehicle(id))
             {
                 return Json(new { type = true, message = "Vechicle was checkedout!" });
             }
             else
             {
                 return Json(new { type = false, message = "Vechicle was not checkedout!" });
+            }
+        }
+
+        public ActionResult Remove(int? id)
+        {
+            if (id != null)
+            {
+                Vehicle v = Garage.GetVehicle(id.Value);
+                return PartialView("Remove", v);
+            }
+            else
+                return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Remove(int id)
+        {
+            if (Garage.RemoveVehicle(id))
+            {
+                return Json(new { type = true, message = "Vechicle was removed!" });
+            }
+            else
+            {
+                return Json(new { type = false, message = "Vechicle was not removed!" });
             }
         }
 
@@ -229,5 +255,13 @@ namespace Garage2._0.Controllers
 
             return RedirectToAction("Index");
         }
+
+
+        public ActionResult Delete(int id = 0)
+        {
+            Garage.RemoveVehicle(id);
+            return RedirectToAction("Index");
+        }
+       
     }
 }

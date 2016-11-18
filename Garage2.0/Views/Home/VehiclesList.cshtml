@@ -44,7 +44,10 @@
                     @Html.DisplayFor(modelItem => item.NumberOfWheels)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.VehicleType)
+                    @{
+                        string vtype = Enum.GetNames(typeof(prices)).Single(n => n.Equals(item.VehicleType.ToString()));
+                    }
+                    <strong>@vtype</strong>
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.InTime)

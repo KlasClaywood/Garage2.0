@@ -35,10 +35,10 @@ namespace Garage2._0.Models
 
     public enum Vehicles
     {
-        Car,
-        Truck,
-        Boat,
-        Motorcycle
+        Car = 10,
+        Truck = 20,
+        Boat = 30,
+        Motorcycle = 5
     }
     
 }
