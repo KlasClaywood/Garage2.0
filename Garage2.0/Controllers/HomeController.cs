@@ -177,5 +177,12 @@ namespace Garage2._0.Controllers
             else
                 return View("Index", Garage.FilterInDate(indatum));
         }
+
+        public ActionResult Delete(int id = 0)
+        {
+            Garage.RemoveVehicle(id);
+            return RedirectToAction("Index");
+        }
+       
     }
 }
