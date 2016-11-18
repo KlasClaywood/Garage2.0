@@ -16,5 +16,7 @@ namespace Garage2._0.Repositories
         public DateTime? InTimeFilter { get; set; }
         public DateTime? OutTimeFilter { get; set; }
 
+        public bool Checkedin { get; set; }
+        public bool Checkedout { get; set; }
     }
 }
