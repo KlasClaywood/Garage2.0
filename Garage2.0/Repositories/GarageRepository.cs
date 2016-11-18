@@ -33,7 +33,7 @@ namespace Garage2._0.Repositories
                                             v.RegNr.Contains(target.SearchRegNr) &&
                                             target.VehicleType.Any(t => t.Equals(v.VehicleType.ToString())) &&
                                             (v.InTime == null ? default(DateTime) <= target.InTimeFilter : v.InTime >= target.InTimeFilter)  &&
-                                            (v.OutTime == null ? default(DateTime) <= target.OutTimeFilter : v.OutTime <= target.OutTimeFilter) && 
+                                            (v.OutTime == null ? new DateTime(9999, 12, 12) >= target.OutTimeFilter : v.OutTime <= target.OutTimeFilter) && 
                                             (v.Checkedin == target.Checkedin ||
                                             v.Checkedin != target.Checkedout)
                                           ).OrderBy(v => v.VehicleType).ThenByDescending(v => v.InTime);
@@ -100,15 +100,15 @@ namespace Garage2._0.Repositories
             Vehicle v =  Context.Vehicles.Find(newVehicle.Id);
 
             //Context.Entry(v).State = EntityState.Modified;
-
+            
             foreach (PropertyInfo p in typeof(Vehicle).GetProperties())
             {
                 PropertyInfo vehicleproperty = typeof(Vehicle).GetProperty(p.Name);
-                if (vehicleproperty.GetValue(newVehicle) != null)
-                    vehicleproperty.SetValue(v, vehicleproperty.GetValue(newVehicle));
-            }
 
-            //Context.Vehicles.Find(newVehicle.Id) = v;
+                vehicleproperty.SetValue(v, vehicleproperty.GetValue(newVehicle));
+            }
+            
+            //v = newVehicle;
 
             Context.SaveChanges();
         }

@@ -47,7 +47,7 @@
                     @{
                         string vtype = Enum.GetNames(typeof(prices)).Single(n => n.Equals(item.VehicleType.ToString()));
                     }
-                    <strong>@vtype</strong>
+                    @vtype
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.InTime)

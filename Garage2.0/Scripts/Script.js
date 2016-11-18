@@ -61,6 +61,7 @@ var FormSuccess = function (data) {
     if(data.type != "" && data.type != null)
         ShowAlert(data.type, data.message);
 
+    console.log(data);
 
     if (data.function != "" && data.function != null)
         functions[data.function](data.id);
@@ -101,8 +102,8 @@ var ShowAlert = function (type, message) {
         $("#general-alert").addClass("alert-success");
         $("#general-alert").show();
         $("#general-alert").alert();
-        $("#general-alert").fadeTo(2000, 500).slideUp(500, function () {
-            $("#general-alert").slideUp(500);
+        $("#general-alert").fadeTo(2000, 500).slideUp(2000, function () {
+            $("#general-alert").slideUp(2000);
             $("#general-alert").removeClass("alert-success");
             $("#general-alert").html("");
         });
@@ -112,8 +113,8 @@ var ShowAlert = function (type, message) {
         $("#general-alert").addClass("alert-danger");
         $("#general-alert").show();
         $("#general-alert").alert();
-        $("#general-alert").fadeTo(2000, 500).slideUp(500, function () {
-            $("#general-alert").slideUp(500);
+        $("#general-alert").fadeTo(2000, 500).slideUp(2000, function () {
+            $("#general-alert").slideUp(2000);
             $("#general-alert").removeClass("alert-danger");
             $("#general-alert").html("");
         });

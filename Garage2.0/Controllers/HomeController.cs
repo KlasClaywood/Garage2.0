@@ -102,9 +102,7 @@ namespace Garage2._0.Controllers
             if (ModelState.IsValid && Request.IsAjaxRequest())
             {
                 /// default vehicle prices from the model Prices.cs
-                string vtype = Enum.GetNames(typeof(prices)).Single(n => n.Equals(newVehicle.VehicleType.ToString()));
-                int price = (int)Enum.Parse(typeof(prices), vtype);
-                
+                /// 
 
                 //newVehicle.TotalMoneyAmount = price;
                 Vehicle v = new Vehicle();
@@ -117,10 +115,12 @@ namespace Garage2._0.Controllers
                     vehicleproperty.SetValue(v, modelproperty.GetValue(newVehicle));
                 }
 
-                if(Garage.AddVehicle(v).exist == false)
-                    return Json(new { type = true, message = string.Format("Vehicle {0} was created", v.RegNr), function = "Checkin", id = v.Id });
+                var dv = Garage.AddVehicle(v);
+
+                if (dv.exist == false)
+                    return Json(new { type = true, message = string.Format("Vehicle {0} was created", v.RegNr), function = "Checkin", id = dv.Id });
                 else
-                    return Json(new { type = true, message = string.Format("Vehicle {0} Already exist", v.RegNr), function = "Checkin", id = v.Id });
+                    return Json(new { type = true, message = string.Format("Vehicle {0} Already exist", v.RegNr), function = "Checkin", id = dv.Id });
             }
             return RedirectToAction("Index");
         }
@@ -233,16 +233,9 @@ namespace Garage2._0.Controllers
         {
             if (ModelState.IsValid && Request.IsAjaxRequest())
             {
-                if (!newVehicle.InTime.HasValue) // server side check for inTime
-                {
-                    TempData["ErrorMessage"] = "Invalid Data!";
-                    return PartialView("Edit", newVehicle);
-                }
-                else
-                {
-                    Garage.EditVehicle(newVehicle);
-                    return Json(new { type = true, message = "Item Edited!" });
-                }
+                Garage.EditVehicle(newVehicle);
+
+                return Json(new { type = true, message = "Item Edited!" });
             }
 
             return RedirectToAction("Index");

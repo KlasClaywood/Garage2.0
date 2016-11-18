@@ -24,6 +24,7 @@ namespace Garage2._0.Models
         public int NumberOfWheels { get; set; }
 
         [Required]
-        public Vehicles VehicleType { get; set; }
+        [EnumDataType(typeof(Vehicles))]
+        public Vehicles? VehicleType { get; set; }
     }
 }
