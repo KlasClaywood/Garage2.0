@@ -1,4 +1,4 @@
-﻿@model Garage2._0.Models.Vehicle
+﻿@model Garage2._0.Models.CheckOutViewModel
 @{
     Layout = null;
 }
@@ -8,67 +8,67 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h3 class="modal-title">Are you sure you want to check out this?</h3>
-                <h4 class="modal-title">Price: @((int)((Model.InTime > DateTime.Now)? 0 : (Model.OutTime == null || Model.OutTime > DateTime.Now)? (DateTime.Now - Model.InTime).Value.TotalHours * 10 : (Model.OutTime - Model.InTime).Value.TotalHours * 10 + (DateTime.Now - Model.OutTime).Value.TotalHours * 2 * 10))</h4>
+                <h4 class="modal-title">Price: @((int)((Model.vehicle.InTime > DateTime.Now) ? 0 : (Model.vehicle.OutTime == null || Model.vehicle.OutTime > DateTime.Now) ? (DateTime.Now - Model.vehicle.InTime).Value.TotalHours * (int)(Model.vehicle.VehicleType) : (Model.vehicle.OutTime - Model.vehicle.InTime).Value.TotalHours * (int)(Model.vehicle.VehicleType) + (DateTime.Now - Model.vehicle.OutTime).Value.TotalHours * 2 * (int)(Model.vehicle.VehicleType)))</h4>
             </div>
             <div class="modal-body">
                 <dl class="dl-horizontal">
                     <dt>
-                        @Html.DisplayNameFor(model => model.Owner)
+                        @Html.DisplayNameFor(model => model.vehicle.Owner)
                     </dt>
 
                     <dd>
-                        @Html.DisplayFor(model => model.Owner)
+                        @Html.DisplayFor(model => model.vehicle.Owner)
                     </dd>
 
                     <dt>
-                        @Html.DisplayNameFor(model => model.RegNr)
+                        @Html.DisplayNameFor(model => model.vehicle.RegNr)
                     </dt>
 
                     <dd>
-                        @Html.DisplayFor(model => model.RegNr)
+                        @Html.DisplayFor(model => model.vehicle.RegNr)
                     </dd>
 
                     <dt>
-                        @Html.DisplayNameFor(model => model.Color)
+                        @Html.DisplayNameFor(model => model.vehicle.Color)
                     </dt>
 
                     <dd>
-                        @Html.DisplayFor(model => model.Color)
+                        @Html.DisplayFor(model => model.vehicle.Color)
                     </dd>
 
                     <dt>
-                        @Html.DisplayNameFor(model => model.NumberOfWheels)
+                        @Html.DisplayNameFor(model => model.vehicle.NumberOfWheels)
                     </dt>
 
                     <dd>
-                        @Html.DisplayFor(model => model.NumberOfWheels)
+                        @Html.DisplayFor(model => model.vehicle.NumberOfWheels)
                     </dd>
 
                     <dt>
-                        @Html.DisplayNameFor(model => model.VehicleType)
+                        @Html.DisplayNameFor(model => model.vehicle.VehicleType)
                     </dt>
 
                     <dd>
-                        @Html.DisplayFor(model => model.VehicleType)
+                        @Html.DisplayFor(model => model.vehicle.VehicleType)
                     </dd>
 
                     <dt>
-                        @Html.DisplayNameFor(model => model.InTime)
+                        @Html.DisplayNameFor(model => model.vehicle.InTime)
                     </dt>
 
                     <dd>
-                        @Html.DisplayFor(model => model.InTime)
+                        @Html.DisplayFor(model => model.vehicle.InTime)
                     </dd>
                     <dt>
-                        @Html.DisplayNameFor(model => model.OutTime)
+                        @Html.DisplayNameFor(model => model.vehicle.OutTime)
                     </dt>
 
                     <dd>
-                        @Html.DisplayFor(model => model.OutTime)
+                        @Html.DisplayFor(model => model.vehicle.OutTime)
                     </dd>
                 </dl>
 
-                @using (Ajax.BeginForm("Checkout", new { id = Model.Id }, new AjaxOptions { OnSuccess = "FormSuccess" }, new { id = "modalForm" }))
+                @using (Ajax.BeginForm("Checkout", new { id = Model.vehicle.Id }, new AjaxOptions { OnSuccess = "FormSuccess" }, new { id = "modalForm" }))
                 {
                     @Html.AntiForgeryToken()
                 }

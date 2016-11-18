@@ -19,7 +19,10 @@
         viewport: 'body'
     });
 
-    $('#VehicleType').multiselect({ multiple: true, includeSelectAllOption: true, selectAllValue: 'All', numberDisplayed: 1, selectAllText: 'All'  });
+    $('#VehicleType').multiselect({ multiple: true, includeSelectAllOption: true, selectAllValue: 'All', numberDisplayed: 1, selectAllText: 'All' });
+    $('#SearchForm input').change(function () {
+        $('#SearchForm').submit();
+    });
 
 });
 
@@ -37,6 +40,7 @@ var getVehiclePriceCheckIn = function () {
 
 var FormSubmitted = function () {
     $this = $(this);
+
     if (!$this.valid()) {
         return false;
     }
@@ -57,7 +61,29 @@ var FormSuccess = function (data) {
     if(data.type != "" && data.type != null)
         ShowAlert(data.type, data.message);
 
+
+    if (data.function != "" && data.function != null)
+        functions[data.function](data.id);
+        
+
     refreshVehicleList();
+};
+
+var functions = {};
+
+functions.Checkin = function (id) {
+    var options = {
+        url: "/Home/Checkin/" + id,
+        type: 'get'
+    };
+
+    $.ajax(options).done(function (data) {
+        $('#Modal').modal('hide');
+        window.setTimeout(function () {
+            $('#ModalContainer').html(data);
+            ModalLoaded();
+        }, 500);
+    });
 };
 
 var buildTable = function () {
@@ -65,15 +91,7 @@ var buildTable = function () {
 };
 
 var refreshVehicleList = function () {
-    var options = {
-        url: "/Home/Index",
-        type: 'get'
-    };
-
-    $.ajax(options).done(function (data) {
-        $('#VechicleListContainer').html(data);
-        buildTable();
-    });
+    $("#SearchForm").submit();
 };
 
 var ShowAlert = function (type, message) {

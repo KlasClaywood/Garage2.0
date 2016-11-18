@@ -1,4 +1,4 @@
-﻿@model Garage2._0.Models.Vehicle
+﻿@model Garage2._0.Models.CheckInViewModel
 @{
     Layout = null;
 }
@@ -7,108 +7,79 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">Check In!</h4>
+                <h4 class="modal-title">Check in!</h4>
             </div>
             <div class="modal-body">
-                @using (Ajax.BeginForm("Checkin", "Home", null, new AjaxOptions { OnSuccess = "FormSuccess" }, new { id = "modalForm", target = "_self" }))
+                @using (Ajax.BeginForm("Checkin", "Home", new { id = Model.Id }, new AjaxOptions { OnSuccess = "FormSuccess" }, new { id = "modalForm", target = "_self" }))
                 {
                     @Html.AntiForgeryToken()
 
                     <div class="form-horizontal">
                         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        @Html.HiddenFor(model => model.Id)
+
                         <div class="form-group">
-                            @Html.LabelFor(model => model.Owner, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <label class="control-label col-md-2">Owner</label>
                             <div class="col-md-10">
-                                @Html.EditorFor(model => model.Owner, new { htmlAttributes = new { @class = "form-control" } })
-                                @Html.ValidationMessageFor(model => model.Owner, "", new { @class = "text-danger" })
+                                <label class="control-label col-md-2">@(Model.vehicle.Owner)</label>
                             </div>
                         </div>
 
                         <div class="form-group">
-                            @Html.LabelFor(model => model.RegNr, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <label class="control-label col-md-2">RegNr</label>
                             <div class="col-md-10">
-                                @Html.EditorFor(model => model.RegNr, new { htmlAttributes = new { @class = "form-control" } })
-                                @Html.ValidationMessageFor(model => model.RegNr, "", new { @class = "text-danger" })
+                                <label class="control-label col-md-2">@(Model.vehicle.RegNr)</label>
                             </div>
                         </div>
 
                         <div class="form-group">
-                            @Html.LabelFor(model => model.Color, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <label class="control-label col-md-2">Color</label>
                             <div class="col-md-10">
-                                @Html.EditorFor(model => model.Color, new { htmlAttributes = new { @class = "form-control" } })
-                                @Html.ValidationMessageFor(model => model.Color, "", new { @class = "text-danger" })
+                                <label class="control-label col-md-2">@(Model.vehicle.Color)</label>
                             </div>
                         </div>
 
                         <div class="form-group">
-                            @Html.LabelFor(model => model.NumberOfWheels, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <label class="control-label col-md-2">Number of wheels</label>
                             <div class="col-md-10">
-                                @Html.EditorFor(model => model.NumberOfWheels, new { htmlAttributes = new { @class = "form-control" } })
-                                @Html.ValidationMessageFor(model => model.NumberOfWheels, "", new { @class = "text-danger" })
+                                <label class="control-label col-md-2">@(Model.vehicle.NumberOfWheels)</label>
                             </div>
                         </div>
 
                         <div class="form-group">
-                            @Html.LabelFor(model => model.VehicleType, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <label class="control-label col-md-2">Vehicle Type</label>
                             <div class="col-md-10">
-                                @Html.EnumDropDownListFor(model => model.VehicleType, htmlAttributes: new { @class = "form-control" })
-                                @Html.ValidationMessageFor(model => model.VehicleType, "", new { @class = "text-danger" })
+                                <label class="control-label col-md-2">@(Model.vehicle.VehicleType)</label>
                             </div>
                         </div>
 
                         <div class="form-group">
                             @Html.LabelFor(model => model.InTime, htmlAttributes: new { @class = "control-label col-md-2" })
-                            <div class="col-sm-6">
-                                <div class='input-group date datepickercheckin' id='datetimepickerin'>
-                                    <input type='text' class="form-control" name="InTime"/>
-                                    <span class="input-group-addon">
-                                        <span class="glyphicon glyphicon-calendar"></span>
-                                    </span>
-                                </div>
-                                @{
-                    if (TempData["ErrorMessage"] != "" || TempData["ErrorMessage"] != null)
-                    {
-                        <span class="text-danger field-validation-error">
-                            @TempData["ErrorMessage"]
-                        </span>
-                    }
-                                }
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.InTime, new { htmlAttributes = new { @class = "form-control datepickeredit" } })
+                                @Html.ValidationMessageFor(model => model.InTime, "", new { @class = "text-danger" })
                             </div>
                         </div>
 
                         <div class="form-group">
                             @Html.LabelFor(model => model.OutTime, htmlAttributes: new { @class = "control-label col-md-2" })
-                            <div class="col-sm-6">
-                                <div class='input-group date datepickercheckin'>
-                                    <input type='text' class="form-control" name="OutTime" id='datetimepickerout' />
-                                    <span class="input-group-addon">
-                                        <span class="glyphicon glyphicon-calendar"></span>
-                                    </span>
-                                </div>
-                                @{
-                    if (TempData["ErrorMessage"] != "" || TempData["ErrorMessage"] != null)
-                    {
-                        <span class="text-danger field-validation-error">
-                            @TempData["ErrorMessage"]
-                        </span>
-                    }
-                                }
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.OutTime, new { htmlAttributes = new { @class = "form-control datepickeredit" } })
+                                @Html.ValidationMessageFor(model => model.OutTime, "", new { @class = "text-danger" })
                             </div>
                         </div>
                     </div>
+                    <input data-val="true" id="Checkedin" name="Checkedin" type="checkbox" value="true" checked hidden>
                 }
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                <input type="submit" value="Check IN" class="btn btn-primary" form="modalForm" />
+                <input type="submit" value="Save" class="btn btn-primary" form="modalForm" />
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 
 <script>
-    $('.datepickercheckin').datetimepicker({
-        useCurrent: true,
-    });
-
+    $('.datepickeredit').datetimepicker();
 </script>

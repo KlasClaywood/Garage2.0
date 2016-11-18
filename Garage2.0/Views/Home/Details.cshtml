@@ -73,7 +73,13 @@
         }
         <tr>
             <td>
-                @Html.ActionLink("Delete","Delete", new { id = Model.Id })
+                @Ajax.ActionLink("Delete", "Remove", new { id = Model.Id }, new AjaxOptions
+                        {
+                            InsertionMode = InsertionMode.Replace,
+                            UpdateTargetId = "ModalContainer",
+                            HttpMethod = "GET",
+                            OnSuccess = "ModalLoaded"
+                        }, new { target = "_self" })
             </td>
         </tr>
     </tbody>
